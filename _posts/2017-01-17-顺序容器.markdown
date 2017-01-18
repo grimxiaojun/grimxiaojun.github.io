@@ -1,0 +1,253 @@
+---
+layout: post
+title:  "Welcome to Grimxiaojun's Blog!"
+
+---
+<h3>顺序容器类型</h3>
+
+所有顺序容器都提供了快速顺序访问元素的能力
+
+```c++
+vector            //可变大小数组，支持快速随机访问。但在尾部之外的位置插入                   //或删除元素可能会很慢
+deque             //双端队列，支持快速随机访问，在头尾位置插入/删除速度很快
+list              //双向链表，只支持双向顺序访问。在任何位置进行插入/删除速                   //度都很快
+forward_list
+array
+string
+```
+**通常，使用vector是最好的选择，除非你有很好的理由选择其他容器**
+
+<h3>顺序容器操作</h3>
+
+**添加元素**
+
+	这些操作会改变容器的大小；array不支持这些操作
+	forward_list有自己专有版本的insert与emplace
+	forward_list不支持push_back与emplace_back
+	vector和string不支持push_front和emplace_front
+	c.push_back(t)
+	c.emplace_back(args)
+	c.push_front(t)
+	c.emplace_front(args)
+	c.insert(p,t)
+	c.emplace(p,args)
+	c.insert(p,n,e)
+	c.insert(p,b,e)
+	c.insert(p,il)
+**tip:向一个vector,string,deque插入元素会使所有指向容器的迭代器、引用和指针失效**
+
+关于容器元素这有一个概念， **容器元素是拷贝**  —— **即插入容器中的值不是对象本身，对其修改，不会影响任何其他元素或对象** 
+
+**访问元素操作**
+
+		每个顺序容器都有一个front成员函数，而除forward_list之外其余所有顺序容器都有back成员函数
+		at和下标操作只适用于string,vector,deque和array
+		back不适用于forward_list
+	c.back()             //返回c中尾元素引用，若c为空，则函数行为未定义
+	c.front()            //返回c中首元素引用，若c为空，则函数行为未定义
+	c[n]
+	c.at(n)
+**删除元素**
+
+	下列操作会改变容器的大小，所以不适用与array
+	forward_list有特殊版本的erase
+	forward_list不支持pop_back
+	vector,string不支持pop_front
+	
+	c.pop_back()    //删除c中尾元素
+	c.pop_front()   //删除c中首元素
+	c.erase(p)      //删除迭代器中p所指元素，返回p所指元素的下一个元素
+	c.erase(b,e)    //删除迭代器b和e所指定范围内元素
+	c.clear         //删除c中所有元素
+
+   **对于forword_list**
+
+	lst.before_begin()     返回指向首元素之前不存在的元素的迭代器，不能解引用
+	lst.cbefore_begin()
+	
+	lst.insert_after(p,t)      可从字面上理解，在p后插入t
+	lst.insert_after(p,n,t)
+	lst.insert_after(p,b,e)
+	lst.insert_after(p,il)
+	
+	emplace_after(p,args)
+	
+	lst.erase_after(p)         删除p指向的位置之后的元素
+	lst.erase_after(b,e)
+**改变容器大小**
+
+	resize不适用于array
+	c.resize(n)      调整大小为n，若n<c.size(),则多出的元素被丢弃
+	c.resize(n,t)    调整大小为n，任何新添加的元素都初始化为值t
+
+**vector对象是如何增长的**
+
+	管理容量的成员函数
+	shrink_to_fit只是用于vector,string和deque
+	capacity和reverse只适用于vector和string
+	c.shrink_to_fit()     //清楚多余的空间，使capacity与c.size()的大小一样
+	c.capacity()          //不重新分配内存空间的话，c可以保存多少元素
+	c.reverse(n)           //进行重新分配至少n个内存空间
+	
+	reserve并不改变容器中的元素数量，它仅影响vector预先分配多大的内存空间
+
+
+**构造string的方法**
+
+	string s1                     //空串
+	string s2(s1)                 //拷贝
+	string s2=s1
+	string s3("value")            //赋值
+	string s3="value"
+	string s4(n,'c')              //"cccccc....(n个c)"
+	string s(cp,n)                //cp指向的数组中前n个字符的拷贝
+	string s(s2,pos2)             //从s2的下标pos2开始
+	string s(s2,pos2,len2)        //从s2的下标pos2开始的len2个字符
+
+
+	substr操作
+	s.substr(pos,n)        //返回一个string包含s从下标pos开始的n个字符
+**改变string的方法**
+
+	string支持顺序容器的赋值运算以及assign,insert,erase操作
+	容器赋值运算assign
+	assign操作不适用于关联容器和array
+	seq.assign(b,e)  //将seq内元素替换为迭代器b与e所指范围中的元素，b e不能指                  //向seq 
+	seq.assign(il)   //将seq内元素替换为初始化列表il中的元素
+	seq.assign(n,t)  //将seq内元素替换为n个连续的t
+	
+	insert:
+	vector,string,deque,list均支持insert成员
+	forward_list提供了特殊版本的insert成员
+	
+	slist.insert(iter,"hello")
+	svec.insert(svec.begin(),"hello")   //vector
+	slist.insert(slist.begin(),"hello")  //等价于slist.push_front("hello")
+	
+	svec.insert(svec.end(),10,"hi");    //插入一组元素
+	
+	//插入范围元素
+	如：
+	vector<string> v={"bb","aa","hi"};
+	slist.insert(slist.begin(),v.end()-2,v.end());
+
+
+​	
+	//删除
+	erase
+	
+	c.erase(p)     //删除p所指元素，返回后一个
+	c.erase(b,e)   //删除 b e 范围内所有元素返回最后被删元素的后一个
+
+
+	string除了接受迭代器的版本外，还接受下标的版本
+	s.insert(s.size(),5,'!') //在最后增加5个!
+	s.erase(s.size()-5,5)    //删除后5个元素
+	
+	const char *p="hello world"
+	s.assign(p,5)                   //s为 hello
+	s.insert(s.size(),p+5)          //s为 hello world
+
+
+	string s="some string",s2="some other string"
+	s.insert(0,s2)              //从s[0]之前插入s2
+	s.insert(0,s2,0,s2.size())  //从s[0]之前插入s2中s2[0]开始的s2.size()个字                             //符
+
+
+	append和replace函数
+	append为追加函数
+	如   s2="C++ Primer"
+	     s2.append(" 4th Ed.")
+	
+	replace操作是调用erase 和insert的简写操作
+	如
+	s2.erase(11,3)
+	s2.insert(11,"5th");
+	等价于s2.replace(11,3,"5th")
+
+
+**顺带的swap**
+
+统一使用非成员版本的swap是一个好习惯
+
+		vector<string>  vec1(10);
+		vector<string>  vec2(24);
+		swap(vec1,vec2);
+		
+		交换后vec1有24个元素，vec2有10个元素
+		
+		swap只是交换了两个容器的内部数据结果
+**string的搜索操作**
+
+	    操作均分大小写
+
+	    s.find(args)              //查找s中args第一次出现的位置
+	    s.rfind(args)             //查找s中args最后一次出现的位置
+	    s.find_first_of(args)     //在s中查找args中任意字符第一次出现的位置
+	    s.find_last_of(args)      //在s中查找args中任意字符最后一次出现的位置
+	    s.find_first_not_of(args) //在s中查找第一个不在args中的字符
+	    s.find_last_not_of(args)  //在s中查找最后一个不在args中的字符
+**容器适配器**
+
+有stack、queue和priority_queue
+
+stack适配器接受一个顺序容器(除array与forward_list外)并使其操作看起来像一个stack一样
+
+
+
+定义一个适配器
+
+       每个适配器都定义两个构造函数：默认构造函数创建一个空对象
+       接受一个容器的构造函数拷贝该容器来初始化适配器
+       
+       如： deq是一个deque<int>
+       有 stack<int> stk(deq)     //将deq拷贝元素到stk
+       
+       默认情况下，stack和queue是基于deque实现的
+       priority_queue是在vector之上实现的
+
+
+       stack<string,vector<string>> str_stk;// 在vector上实现的空栈
+       stack<string,vector<string>> str_stk2(svec)//拷贝svec进行初始化
+       
+       使用适配器是有限制的，适配器要求容器具有添加和删除元素和访问尾元素的能力
+       因此 array与forward_list均不能用于构造适配器
+
+
+       stack只要求push_back,pop_back,back操作
+       	（除array,forward_list外均可）
+       queue要求back,push_back,front,push_front
+         （list,deque）
+       priority除了要求front,push_back,pop_back操作之外还要能随机访问  		（deque,vector）
+
+**stack**
+
+stack类型定义在stack头文件中
+
+它所支持的操作
+
+    栈默认在deque实现，也可以在list或vector上实现
+    s.pop()              //删除栈顶元素，不返回元素值
+    s.push(item)         //创建一个新元素压入栈顶
+    s.top()              //返回栈顶元素，不弹出栈
+    s.emplace(args)      //构造一个元素压入栈顶
+
+**queue**
+
+queue与priority_queue定义在queue头文件中
+
+所支持操作如下：
+
+    queue默认基于deque实现，priority_queue默认基于vector实现
+    queue也可用于list,vector
+    priority_queue也可用于deque
+    
+    q.pop()          //返回queue的首元素或priority_queue的最高优先级元素，但                  //不删除此元素
+    q.front()        //返回首元素或尾元素
+    q.back()         //只适用于queue
+    q.top()          //只适用于priority_queue,返回最高优先级元素，但不删除
+    q.push(item)         //在queue末尾或priority_queue中恰当的位置创建一个元                      //素,值为item,,,
+    q.emplace(args)      //构造一个元素
+标准库queue使用一种先进先出的存储和访问策略，进入的对象放置到队尾，离开的对象从队首删除
+
+priority_queue允许我们为队列里的元素建立优先级，新增元素会排在比它优先级低的元素前
