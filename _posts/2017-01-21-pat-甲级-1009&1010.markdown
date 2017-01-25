@@ -1,0 +1,339 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1009&1010!"
+
+---
+# 1009. Product of Polynomials (25)
+
+This time, you are supposed to find A*B where A and B are two polynomials.
+
+**Input Specification:**
+
+Each input file contains one test case. Each case occupies 2 lines, and each line contains the information of a polynomial:K N1 aN1 N2 aN2 ... NK aNK, where K is the number of nonzero terms in the polynomial, Ni and aNi (i=1, 2, ..., K) are the exponents and coefficients, respectively.  It is given that 1 <= K <= 10, 0 <= NK < ... < N2 < N1 <=1000.  
+
+**Output Specification:**
+
+For each test case you should output the product of A and B in one line, with the same format as the input.  Notice that there must be NO extra space at the end of each line.  Please be accurate up to 1 decimal place. 
+
+Sample Input
+
+```
+2 1 2.4 0 3.2
+2 2 1.5 1 0.5
+
+```
+
+Sample Output
+
+```
+3 3 3.6 2 6.0 1 1.6
+```
+
+题意为多项式相乘
+
+输出不为0的结果，精确到小数点后一位
+
+需要注意的点！！！
+
+计算相乘后，相同指数的相加时若结果为0则不加入
+
+代码如下：
+
+```c++
+#include<iostream>
+#include<algorithm>
+#include<vector>
+using namespace std;
+
+class Polynomial{
+public:
+	int exponent;
+	float coefficient;
+	bool operator < (const Polynomial &po)const{
+		return exponent > po.exponent;
+	}
+};
+int main(){
+	vector<Polynomial> vec1;
+	vector<Polynomial> vec2;
+	vector<Polynomial> vec3;
+	vector<Polynomial> vec;
+	int K;
+	int exponent;
+	float coefficient;	
+	for(int i=0;i<2;++i){
+		cin>>K;
+		for(int j=0;j<K;++j){
+			cin>>exponent>>coefficient;
+			Polynomial pol;
+			pol.exponent=exponent;
+			pol.coefficient=coefficient;
+			if(i==0){
+				vec1.push_back(pol);
+			}else{
+				vec2.push_back(pol);
+			}
+		}
+	}
+  /*相乘后的结果*/
+	for(int i=0;i<vec1.size();++i){
+		for(int j=0;j<vec2.size();++j){
+			Polynomial pol;
+			pol.exponent=vec1[i].exponent+vec2[j].exponent;
+			pol.coefficient=vec1[i].coefficient*vec2[j].coefficient;
+			vec3.push_back(pol);
+		}
+	}
+	sort(vec3.begin(),vec3.end());
+	int index=0;
+  /*将相同指数的相加*/
+	while(1){
+		int start=index,end=index;
+		int flag=0;
+		for(int i=index;i<vec3.size()-1;++i){
+			if(vec3[i].exponent==vec3[i+1].exponent){
+				end=i+1;
+				flag=1;
+			}else{
+				break;
+			}
+		}
+		if(flag==1){
+			Polynomial po;
+			po.coefficient=0;
+			po.exponent=vec3[start].exponent;
+			for(int i=start;i<=end;++i){
+				po.coefficient+=vec3[i].coefficient;
+			}
+			if(po.coefficient!=0){
+				vec.push_back(po);
+			}
+			
+		}else{
+			vec.push_back(vec3[start]);
+		}
+		index=end+1;
+		if(index>=vec3.size()){
+			break;
+		}
+
+	}
+	cout<<vec.size()<<" ";
+		for(int i=0;i<vec.size()-1;++i){
+			printf("%d %0.1f ",vec[i].exponent,vec[i].coefficient);
+		}
+		printf("%d %0.1f",vec[vec.size()-1].exponent,vec[vec.size()-1].coefficient);
+
+	
+	
+}
+```
+# 1010. Radix (25)
+
+​    时间限制  
+
+​    400 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CHEN, Yue
+
+Given a pair of positive integers, for example, 6 and 110, can this equation 6 = 110 be true?  The answer is "yes", if 6 is a decimal number and 110 is a binary number.
+
+Now for any pair of positive integers N1 and N2, your task is to find the radix of one number while that of the other is given.
+
+**Input Specification:**
+
+Each input file contains one test case. Each case occupies a line which contains 4 positive integers:
+N1 N2 tag radix
+Here N1 and N2 each has no more than 10 digits.  A digit is less than 
+its radix and is chosen from the set {0-9, a-z} where 0-9 represent the 
+decimal numbers 0-9, and a-z represent the decimal numbers 10-35.  The 
+last number "radix" is the radix of N1 if "tag" is 1, or of N2 if "tag" 
+is 2. 
+
+**Output Specification:**
+
+For each test case, print in one line the radix of the other number so that the equation N1 = N2 is true.  If the equation is impossible, print "Impossible".  If the solution is not unique, output the smallest possible radix.
+
+Sample Input 1:
+
+```
+6 110 1 10
+
+```
+
+Sample Output 1:
+
+```
+2
+
+```
+
+Sample Input 2:
+
+```
+1 ab 1 2
+
+```
+
+Sample Output 2:
+
+```
+Impossible
+```
+
+
+
+这个题的大意为给两个数，并且给出其中一个数的进制，找出可能使者两个数相等的另一个数的进制
+
+对于这个题我一开始时比较模糊的，因为我感觉这个题好多东西没交代清楚
+
+我并不知道radix的范围从什么时候开始，从什么时候结束
+
+这就很尴尬了在网上找了一个资料讲的比较详细[这是网址](http://www.cnblogs.com/549294286/p/3571604.html)
+
+以下为我参照网址的一些东西写出的AC代码
+
+代码如下
+
+```c++
+#include<iostream>
+#include<string>
+#include<sstream>
+using namespace std;
+
+//将输入的数字变为10进制
+long long num_to_decimal(string s,long long radix){
+	long long value=0;
+	long long sum=0;
+	long long index=1;
+	for(int i=s.size()-1;i>=0;--i){
+		if(s[i]>='a' && s[i]<='z'){
+			value=s[i]-'a'+10;
+		}else{
+			value=s[i]-'0';
+		}
+		sum+=value*index;
+		index*=radix;
+	}
+	return sum;
+}
+//确定下界函数
+long long determine_low(string s){
+	long long value=0;
+	long long sum=0;
+	long long low=0;      
+	for(int i=s.size()-1;i>=0;--i){
+		if(s[i]>='a' && s[i]<='z'){
+			value=s[i]-'a'+10;
+		}else{
+			value=s[i]-'0';
+		}
+		if(value+1>low){
+			low=value+1;    //从题意中得知radix比任意单个数字均要大
+		}
+	}
+	return low;
+}
+
+
+
+long long binarySearch(string s,long long low,long long high,long long sum1){
+	long long mid=(low+high)/2;
+	while(low<=high){
+			long long value=0;
+			long long sum=0;
+			long long index=1;
+			for(int i=s.size()-1;i>=0;--i){
+				if(s[i]>='a' && s[i]<='z'){
+					value=s[i]-'a'+10;
+				}else{
+					value=s[i]-'0';
+				}
+				sum+=value*index;
+				if(sum>sum1){
+					high=mid-1;
+					break;
+				}
+				index*=mid;				
+			}
+			if(sum<sum1){
+				low=mid+1;
+			}else if(sum==sum1){
+				return mid;
+			}
+			mid=(low+high)/2;
+	}
+	return -1;
+}
+
+int main(){
+
+	//将已有元素划分为10进制，在确定另一元素的radix范围，在进行二分查找
+	string N1,N2;
+	long long radix;
+	int tag;
+	long long  sum1;
+
+	stringstream ss;
+	int x;
+	cin>>N1>>N2>>tag>>radix;
+	if(N2.size()==1){
+		ss<<N2;
+		ss>>x;
+	}
+	if(N1==N2&&x!=1){
+		cout<<radix;
+		return 0;
+	}
+	long long low,high;
+	long long radix2;
+	if(tag==1){
+		sum1=num_to_decimal(N1,radix);//将已有元素变成10进制
+		low=determine_low(N2);
+		high=(sum1<low)?low:sum1;   //确保下界小于上界
+
+		radix2=binarySearch(N2,low,high,sum1);
+		if(radix2!=-1){
+			cout<<radix2;
+		}else{
+			cout<<"Impossible";
+		}
+	}else{
+		sum1=num_to_decimal(N2,radix);//将已有元素变成10进制
+		low=determine_low(N1);
+		high=(sum1<low)?low:sum1;   //确保下界小于上界
+		radix2=binarySearch(N1,low,high,sum1);
+		if(radix2!=-1){
+			cout<<radix2;
+		}else{
+			cout<<"Impossible";
+		}
+	}
+	return 0;
+}
+
+```
+对于这个题的注意点在我给出的网址上给的已经很详细了，
+
+我这里只说下我觉得的有用的
+
+- 首先将给出radix的数换算成10进制
+- 找radix2时范围计算下界，题目中 ‘A digit is less than its radix ’这句话说的比较清楚，就是要大于每一个单数字，所以下界很好算，遍历整个输入找到最大值+1便是下界
+- 上界可知我们最小输入的两位数的值为10(positive integers),所以上界可知为所给数的值此时范围便确定了
+- 进行二分搜索，返回相应值
+
+不过有一点我没明白的是为什么两个数相等并且不为1的话他们的进制必须相等

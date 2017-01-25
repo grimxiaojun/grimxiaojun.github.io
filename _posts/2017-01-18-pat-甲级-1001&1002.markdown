@@ -1,0 +1,158 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1001-1002!"
+
+---
+string和数值之间的转换（均为C++11）
+
+	to_string(val)    //可将任何算术类型转为数值val的string表示
+
+	stoi(s,p,b)       /*返回s的起始子串（表示整数内容）的数值，b表示转换所用的                   基数，默认值为10；p是size_t指针，用来保存s中第一个非数值                   字符的下标，默认为0，即不保存下标   每个类型都有相应的                     to_string版本*/
+	                  //返回int
+	stol(s,p,b)       //返回long
+	stoul(s,p,b)      //返回unsigned long
+	stoll(s,p,b)      //返回long long
+	stoull(s,p,b)     //返回unsigned long long
+	
+	stof(s,p)        /*返回s的起始子串（表示浮点数内容）的数值                                //返回float
+	stod(s,p)        //返回double
+	stold(s,p)       //返回long double
+下面为代码
+
+## 1001 A+B Format
+
+```c++
+#include<iostream>
+#include<string>
+#include<stdio.h>
+using namespace std;
+int main(){
+	int a,b,sum;
+	char p[10]={0};
+	string s;
+	cin>>a>>b;
+	sum=a+b;
+  // s=to_string(static_cast<long long>(sum)); 使用to_string  (若在支持C++11特性的情况下可直接用)
+    sprintf(p,"%d",sum);
+	s=p;
+	int temp=0;    //temp用来判断为负数还是正数	
+	if(*s.begin()=='-'){
+	     temp=1;
+	}
+	for(int i=s.size()-3;i>temp;i=i-3){
+		s.insert(i,1,',');
+	}
+	cout<<s<<endl;	
+	return 0;
+}
+
+```
+## 1002 A+B for Polynomials（多项式）
+
+题目大意为 输入两行多项式，相加
+
+**Input**
+
+Each input file contains one test case. Each case occupies 2 lines, and each line contains the information of a polynomial:K N1 aN1 N2 aN2 ... NK aNK, where K is the number of nonzero terms in the polynomial, Ni and aNi (i=1, 2, ..., K) are the exponents（指数） and coefficients（系数）, respectively.  It is given that 1 <= K <= 10，0 <= NK < ... < N2 < N1 <=1000.  
+
+**Output**
+
+For each test case you should output the sum of A and B in one line, with the same format as the input.  Notice that there must be NO extra space at the end of each line.  Please be accurate to 1 decimal place. 
+
+Sample Input
+
+```
+2 1 2.4 0 3.2
+2 2 1.5 1 0.5
+
+```
+
+Sample Output
+
+```
+3 2 1.5 1 2.9 0 3.2
+```
+
+以下为我的代码
+
+最后一个测试点有一个段错误。。很尴尬，，应该是vector的insert的问题，但是由于我接触vector不太久，所以没找到。。。以后找到了更新
+
+```c++
+#include<iostream>
+#include<vector>
+using namespace std;
+class Polynomial{
+private :
+	int exponent;
+	float coefficient;
+public:
+	void setexponent(int exponent){
+		this->exponent=exponent;
+	}
+	void setcoeffient(float coefficient){
+		this->coefficient=coefficient;
+	}
+	int getexponent(){
+		return this->exponent;
+	}
+	float getcoeffient(){
+		return this->coefficient;
+	}
+};
+
+int main(){
+   vector<Polynomial> po1;
+   vector<Polynomial> po2;
+   vector<Polynomial> sum;
+   int K,exponent;
+	float coefficient;
+   for(int i=0;i<=1;++i){
+		cin>>K;
+		for(int j=0;j<K;++j){
+			cin>>exponent>>coefficient;
+			Polynomial s;
+			s.setexponent(exponent);
+			s.setcoeffient(coefficient);
+			if(i==0){
+				po1.push_back(s);
+			}else{
+				po2.push_back(s);
+			}
+		}
+   }
+   auto begin1=po1.begin();
+   auto begin2=po2.begin();
+   for(;begin1!=po1.end()&&begin2!=po2.end();){
+	   if((*begin1).getexponent()>(*begin2).getexponent()){
+		   sum.push_back(*begin1);
+		   ++begin1;
+	   }else if((*begin1).getexponent()<(*begin2).getexponent()){
+			sum.push_back(*begin2);
+			++begin2;
+	   }else{
+		   float x=(*begin1).getcoeffient()+(*begin2).getcoeffient();
+		   if(x){
+			    Polynomial s;
+			    s.setexponent((*begin1).getexponent());
+				s.setcoeffient(x);
+				sum.push_back(s);
+		   }  		   
+		   ++begin1;
+		   ++begin2;
+	   }
+   }
+   if(begin1!=po1.end()){
+	   sum.insert(sum.end(),begin1,po1.end());
+   }else if(begin2!=po2.end()){
+		sum.insert(sum.end(),begin2,po2.end());
+   }
+   cout<<sum.size()<<" ";
+   auto begin=sum.begin();
+   for(;begin!=sum.end()-1;++begin){	  
+	   printf("%d %0.1f ",(*begin).getexponent(),(*begin).getcoeffient());
+   }
+   printf("%d %0.1f",(*begin).getexponent(),(*begin).getcoeffient());
+	return 0;
+}
+```
+

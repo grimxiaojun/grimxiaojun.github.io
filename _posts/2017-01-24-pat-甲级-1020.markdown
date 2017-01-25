@@ -1,0 +1,123 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1020!"
+
+---
+# 1020. Tree Traversals (25)
+
+Suppose that all the keys in a binary tree are distinct positive integers.  Given the postorder and inorder traversal sequences, you are supposed to output the level order traversal sequence of the corresponding binary tree.
+
+**Input Specification:**
+
+Each input file contains one test case.  For each case, the first line gives a positive integer N (<=30), the total number of nodes in the binary tree.  The second line gives the postorder sequence and the third line gives the inorder sequence.  All the numbers in a line are separated by a space.
+
+**Output Specification:**
+
+For each test case, print in one line the level order traversal sequence of the corresponding binary tree.  All the numbers in a line must be separated by exactly one space, and there must be no extra space at the end of the line.
+
+Sample Input:
+
+```
+7
+2 3 1 5 7 6 4
+1 2 3 4 5 6 7
+
+```
+
+Sample Output:
+
+```
+4 1 6 3 5 7 2
+```
+```c++
+#include<iostream>
+#include<vector>
+using namespace std;
+
+vector<int> postorder;
+vector<int> inorder;
+vector<int> level(100000,-1);    //
+int flag=0;
+//根据中序后序输出先序
+void preorder(int root,int start,int end){
+	if(start>end) return;
+	int i=start;
+	while(i<end&&postorder[root]!=inorder[i])  ++i;
+	cout<<postorder[root]<<" ";
+	preorder(root-end-1+i,start,i-1);
+	preorder(root-1,i+1,end);
+}
+
+
+//根据先序中序输出后序
+void post(int root,int start,int end){
+	//此里面的postorder为先序遍历
+	if(start>end)  return;
+	int i=start;
+	while(i<end && inorder[i]!=postorder[root])  ++i;
+	post(root+1,start,i-1) ;                                           //左
+	post(root+i+1,i+1,end);
+	cout<<postorder[root]<<" ";
+}
+
+//根据后序中序进行层次遍历
+void bfs(int root,int start,int end,int index){
+	if(start>end)  return;
+	int i=start;
+	while(i<end && postorder[root]!=inorder[i])  ++i;
+	level[index]=postorder[root];
+	
+	bfs(root-(end-i+1),start,i-1,2*index+1);
+	bfs(root-1,i+1,end,2*index+2);
+	if(index>flag) flag=index;
+}
+
+//根据先序中序进行层次遍历
+void bfs1(int root,int start,int end,int index){
+	//此处的postorder为先序
+	if(start>end) return;
+	int i=start;
+	while(i<end && postorder[root] !=inorder[i] )  ++i;
+	level[index]=postorder[root];
+	bfs1(root+1,start,i-1,2*index+1);
+	bfs1(root+i+1,i+1,end,2*index+2);
+	if(flag<index) flag=index;
+}
+
+void printfbfs(){
+	for(int i=0;i<level.size();++i){
+		if(level[i]!=-1&&i!=flag){
+			cout<<level[i]<<" ";
+		}else if(i==flag){
+			cout<<level[i];
+			break;
+		}
+	}
+}
+int main(){
+	int N;
+	cin>>N;
+	int value=0;
+	for(int i=0;i<N;++i){
+		cin>>value;
+		postorder.push_back(value);
+	}
+	for(int i=0;i<N;++i){
+		cin>>value;
+		inorder.push_back(value);
+	}
+
+
+
+
+//	preorder(N-1,0,N-1);
+//	post(0,0,N-1);
+	bfs(N-1,0,N-1,0);
+//	bfs1(0,0,N-1,0);
+	printfbfs();
+	return 0;
+
+}
+```
+有一部分的启示来自于[[柳婼 の  blog](http://www.liuchuo.net/)](http://www.liuchuo.net/archives/2100)
+

@@ -1,0 +1,136 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1003!"
+
+---
+## 1003. Emergency (25)
+
+题目大意为有N个城市，有M条道路，C1为你正在的城市，C2为你必须救的城市
+
+输出从C1到C2共有多少条不同的最短路径和从C1到C2共能聚集多少救援队
+
+这一题我想到了利用最短路径Dijastra
+
+**Input**
+
+Each input file contains one test case. For each test case, the first line contains 4 positive integers: N (<= 500) - the number of cities (and the cities are numbered from 0 to N-1), M - the number of roads, C1 and C2 - the cities that you are currently in and that you must save, respectively.  The next line contains N integers, where the i-th integer is the number of rescue teams in the i-th city.  Then M lines follow, each describes a road with three integers c1, c2 and L, which are the pair of cities connected by a road and the length of that road, respectively.  It is guaranteed that there exists at least one path from C1 to C2.
+
+**Output**
+
+For each test case, print in one line two numbers: the number of 
+different shortest paths between C1 and C2, and the maximum amount of 
+rescue teams you can possibly gather.
+All the numbers in a line must be separated by exactly one space, and there is no extra space allowed at the end of a line.
+
+Sample Input
+
+```
+5 6 0 2
+1 2 1 5 3
+0 1 1
+0 2 2
+0 3 1
+1 2 1
+2 4 1
+3 4 1
+
+```
+
+Sample Output
+
+```
+2 4
+```
+
+我的代码如下利用了Dijkstra求最短路径，基本思路如下图，根据题意修改部分代码
+
+![](../images/photo/Dijkstra.png)
+
+上图为浙江大学陈越姥姥在慕课网上的数据结构课上提出
+
+代码如下
+
+```c++
+#include<iostream>
+using namespace std;
+
+#define MAX 500
+#define INF 0x3f3f3f3f       //用这个数表示无穷大是很精巧的
+
+int N,M,C1,C2,L;              //用来表示城市数目，道路数目，所在城市，需救援城市，城市与城市之间相差的距离
+int rescue_teams[MAX];   //用来存储某一城市有多少救援队
+int road[MAX][MAX];      //用来表示图
+
+int dist[MAX];                //Dijkstra里的dist数组，源点到i的最小距离
+int path_num[MAX];      //原Dijkstra里的path数组是存储到i需经过谁，这里根据题目所知用于存储到某个点共有多少条路径
+int team_num[MAX];     //同上，也是为了题意，用于存储到哪个点最多可以聚集多少个救援队
+int collection[MAX];     //用于收录
+
+/*在进行Dijkstra算法前，将源点收录并更改与其相连的点的dist值，也可直接放进算法里初始化*/
+void Dijkstra(int source){
+	path_num[C1]=1;
+	dist[source]=0;
+	team_num[C1]=rescue_teams[C1];
+	while(1){
+		//找未收录的dist最小
+		int c,mindistance=INF;
+		for(int i=0;i<N;++i){
+			if(collection[i]==0&&dist[i]<mindistance){
+				mindistance=dist[i];
+				c=i;
+			}
+		}
+		if(mindistance==INF || c==C2){
+			break;
+		}
+		collection[c]=1;    //进行收录
+		for(int i=0;i<N;++i){
+			if(collection[i]==0){
+				if(dist[i]>dist[c]+road[c][i]){
+                  //当收录后有更短距离时
+					dist[i]=dist[c]+road[c][i];
+					path_num[i]=path_num[c];
+					team_num[i]=team_num[c]+rescue_teams[i];
+				}else if(road[c][i]!=INF&&dist[i]==dist[c]+road[c][i]){                //当有道路并且距离相等时
+					path_num[i]+=path_num[c];
+					if(team_num[i]<team_num[c]+rescue_teams[i]){
+						team_num[i]=team_num[c]+rescue_teams[i];
+					}
+				}
+			}
+		}
+	}
+
+}
+int main(){
+	cin>>N>>M>>C1>>C2;
+	int team;
+	for(int i=0;i<N;++i){
+		cin>>team;
+		rescue_teams[i]=team;
+		
+	}
+	//进行初始化
+	for(int i=0;i<N;++i){
+		dist[i]=INF;
+		for(int j=0;j<N;++j){
+			if(i==j){
+				road[i][j]=0;
+			}else{
+				road[i][j]=INF;
+			}
+		}
+	}
+	int c1,c2;
+	for(int i=0;i<M;++i){
+		cin>>c1>>c2>>L;
+		road[c1][c2]=L;
+		road[c2][c1]=L;
+	}
+
+
+	Dijkstra(C1);
+	cout<<path_num[C2]<<" "<<team_num[C2]<<endl;
+	return 0;
+}
+```

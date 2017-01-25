@@ -1,0 +1,128 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1015!"
+
+---
+# 1015. Reversible Primes (20)
+
+​    时间限制  
+
+​    400 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CHEN, Yue
+
+A *reversible prime* in any number system is a prime whose "reverse" in that number system is also a prime. For example in the decimal system 73 is a reversible prime because its reverse 37 is also a prime.
+
+Now given any two positive integers N (< 105) and D (1 < D <= 10), you are supposed to tell if N is a reversible prime with radix D.
+
+**Input Specification:**
+
+The input file consists of several test cases.  Each case occupies a line which contains two integers N and D.  The input is finished by a negative N.
+
+**Output Specification:**
+
+For each test case, print in one line "Yes" if N is a reversible prime with radix D, or "No" if not.
+
+Sample Input:
+
+```
+73 10
+23 2
+23 10
+-2
+
+```
+
+Sample Output:
+
+```
+Yes
+Yes
+No
+```
+
+题目大致解法为先判断所给10进制数是否为Prime，
+
+再将所给数利用radix反转重新化为10进制再次判断是否为Prime.
+
+```c++
+#include<iostream>
+#include<sstream>
+#include<cmath>
+using namespace std;
+
+int decimal_reverseto_anyradix_decimal(int N,int D){
+	int num=N%D;
+	while((N/D)!=0){
+		N/=D;
+		num=num*D+N%D;
+	}
+	return num;
+}
+int isPrime(int s){
+	if(s==0||s==1) return 0;
+	if(s==2||s==3)  return 1;
+	for(int i=2;i*i<=s;++i){
+		if(s%i==0){
+			return 0;
+		}
+	}
+	return 1;
+}
+int main(){
+	int N,D;	
+	while(cin>>N){
+		if(N<0)  break;
+		cin>>D;
+		if(isPrime(N)){
+			N=decimal_to_any_radix(N,D);
+			if(isPrime(N)){				
+				cout<<"Yes"<<endl;
+			}else{				
+				cout<<"No"<<endl;
+			}
+		}else{
+			cout<<"No"<<endl;
+		}
+	}
+	return 0;
+}
+```
+这个题的重要点是将进制转化为相应进制反转后变为10进制
+
+上面程序是利用了（（XD+Y）D+Y）D+Y.....
+
+正常途径来看是从个位数加起，但是这个利用了通用公式XD+Y
+
+下面代码为正常途径
+
+```c++
+//变成相应进制
+int N,D,yu;
+vector<int> vec;
+while(N/D!=0){
+  yu=N%D;
+  vec.push_back(yu);
+  N/=D;
+}
+int sum=0;
+int m=1;
+for(int i=vec.size()-1;i>=0;--i){
+  sum+=m*vec[i];
+  m*=D;
+}
+```

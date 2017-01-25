@@ -1,0 +1,352 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1011&1012!"
+
+---
+# 1011. World Cup Betting (20)
+
+​    时间限制  
+
+​    400 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CHEN, Yue
+
+With the 2010 FIFA World Cup running, football fans the world over were becoming increasingly excited as the best players from the best teams doing battles for the World Cup trophy in South Africa.  Similarly, football betting fans were putting their money where their mouths were, by laying all manner of World Cup bets.
+
+Chinese Football Lottery provided a "Triple Winning" game.  The rule of winning was simple: first select any three of the games.  Then for each selected game, bet on one of the three possible results -- namely W for win, T for tie, and L for lose.  There was an odd assigned to each result.  The winner's odd would be the product of the three odds times 65%.
+
+For example, 3 games' odds are given as the following:
+
+```
+ W    T    L
+1.1  2.5  1.7
+1.2  3.0  1.6
+4.1  1.2  1.1
+
+```
+
+To obtain the maximum profit, one must buy W for the 3rd game, T for the 2nd game, and T for the 1st game.  If each bet takes 2 yuans, then the maximum profit would be (4.1*3.0*2.5*65%-1)*2 = 37.98 yuans (accurate up to 2 decimal places).
+
+**Input**
+
+Each input file contains one test case.  Each case contains the betting information of 3 games.  Each game occupies a line with three distinct odds corresponding to W, T and L.
+
+**Output**
+
+For each test case, print in one line the best bet of each game, and the maximum profit accurate up to 2 decimal places.  The characters and the number must be separated by one space.
+
+Sample Input
+
+```
+1.1 2.5 1.7
+1.2 3.0 1.6
+4.1 1.2 1.1
+
+```
+
+Sample Output
+
+```
+T T W 37.98
+```
+
+这个题较简单
+
+代码如下
+
+```c++
+#include<iostream>
+using namespace std;
+
+int  find_max(float s[3]){
+	int index=0;
+	float max=s[0];
+	for(int i=1;i<3;++i){
+		if(s[i]>max){
+			max=s[i];
+			index=i;
+		}
+	}
+	return index;
+}
+void print_WTL(int index){
+	switch(index){
+	case 0:
+		cout<<"W ";
+		break;
+	case 1:
+		cout<<"T ";
+		break;
+	case 2:
+		cout<<"L ";
+		break;
+	}
+}
+int main(){
+	float first[3],sec[3],third[3];
+	float W,T,L;
+	cin>>W>>T>>L;
+	first[0]=W;first[1]=T;first[2]=L;
+	cin>>W>>T>>L;
+	sec[0]=W;sec[1]=T;sec[2]=L;
+	cin>>W>>T>>L;
+	third[0]=W;third[1]=T;third[2]=L;
+	int index1,index2,index3;
+	index1=find_max(first);
+	index2=find_max(sec);
+	index3=find_max(third);
+	print_WTL(index1);
+	print_WTL(index2);
+	print_WTL(index3);
+	float profit;
+profit=(first[index1]*sec[index2]*third[index3]*0.65-1)*2;
+	printf("%0.2f",profit);
+	return 0;
+}
+```
+# 1012. The Best Rank (25)
+
+To evaluate the performance of our first year CS majored students, we consider their grades of three courses only: C - C Programming Language, M - Mathematics (Calculus or Linear Algebra), and E - English.  At the mean time, we encourage students by emphasizing on their best ranks -- that is, among the four ranks with respect to the three courses and the average grade, we print the best rank for each student.
+
+For example, The grades of C, M, E and A - Average of 4 students are given as the following:
+
+```
+StudentID  C  M  E  A
+310101     98 85 88 90
+310102     70 95 88 84
+310103     82 87 94 88
+310104     91 91 91 91
+
+```
+
+Then the best ranks for all the students are *No.1* since the 1st one has done the best in C Programming Language, while the 2nd one in Mathematics, the 3rd one in English, and the last one in average.
+
+**Input**
+
+Each input file contains one test case.  Each case starts with a line containing 2 numbers N and M (<=2000), which are the total number of students, and the number of students who would check their ranks, respectively.  Then N lines follow, each contains a student ID which is a string of 6 digits, followed by the three integer grades (in the range of [0, 100]) of that student in the order of C, M and E.  Then there are M lines, each containing a student ID.
+
+**Output**
+
+For each of the M students, print in one line the best rank for him/her, and the symbol of the corresponding rank, separated by a space.
+
+The priorities of the ranking methods are ordered as A > C > M > E.  Hence if there are two or more ways for a student to obtain the same best rank, output the one with the highest priority.
+
+If a student is not on the grading list, simply output "N/A".
+
+Sample Input
+
+```
+5 6
+310101 98 85 88
+310102 70 95 88
+310103 82 87 94
+310104 91 91 91
+310105 85 90 90
+310101
+310102
+310103
+310104
+310105
+999999
+
+```
+
+Sample Output
+
+```
+1 C
+1 M
+1 E
+1 A
+3 A
+N/A
+```
+
+这个题是的宗旨是排序对A,C,M,E进行排序
+
+代码如下
+
+```c++
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<string>
+using namespace std;
+
+class Student_info{
+public:
+	string  student_id;
+	int A;
+	int C;
+	int M;
+	int E;
+	bool operator < (const Student_info &s) const{
+		return A > s.A;
+	}
+};
+bool greater_C(const Student_info &s1,const Student_info &s2){
+	return s1.C>s2.C;
+}
+bool greater_M(const Student_info &s1,const Student_info &s2){
+	return s1.M>s2.M;
+}
+bool greater_E(const Student_info &s1,const Student_info &s2){
+	return s1.E>s2.E;
+}
+void determine_best_rank(string student_id,vector<Student_info> s){
+	sort(s.begin(),s.end());   //默认先排序A
+	int rank[4];
+	int index=-1;
+	//对A排序
+	for(int i=0;i<s.size();++i){
+		if(s[i].student_id==student_id){
+			index=i;
+			rank[0]=i+1;
+			for(int j=index;j>=1;--j){
+				if(s[j].A==s[j-1].A){
+					rank[0]=j;
+				}else{
+					break;
+				}
+			}
+			break;
+		}
+	}
+
+	if(index==-1){
+		cout<<"N/A"<<endl;
+		return ;
+	}
+	if(rank[0]==1){
+		cout<<"1 A"<<endl;
+		return ;
+	}
+	//对C排序
+	sort(s.begin(),s.end(),greater_C);
+		for(int i=0;i<s.size();++i){
+		if(s[i].student_id==student_id){
+			index=i;
+			rank[1]=i+1;
+			for(int j=index;j>=1;--j){
+				if(s[j].C==s[j-1].C){
+					rank[1]=j;
+				}else{
+					break;
+				}
+			}
+			break;
+		}
+	}
+	if(rank[1]==1){
+		cout<<"1 C"<<endl;
+		return ;
+	}
+	//对M排序
+	sort(s.begin(),s.end(),greater_M);
+		for(int i=0;i<s.size();++i){
+		if(s[i].student_id==student_id){
+			index=i;
+			rank[2]=i+1;
+			for(int j=index;j>=1;--j){
+				if(s[j].M==s[j-1].M){
+					rank[2]=j;
+				}else{
+					break;
+				}
+			}
+			break;
+		}
+	}
+	if(rank[2]==1){
+		cout<<"1 M"<<endl;
+		return ;
+	}
+	//对E排序
+	sort(s.begin(),s.end(),greater_E);
+		for(int i=0;i<s.size();++i){
+		if(s[i].student_id==student_id){
+			index=i;
+			rank[3]=i+1;
+			for(int j=index;j>=1;--j){
+				if(s[j].E==s[j-1].E){
+					rank[3]=j;
+				}else{
+					break;
+				}
+			}
+			break;
+		}
+	}
+	if(rank[3]==1){
+		cout<<"1 E"<<endl;
+		return ;
+	}
+	//此时已将其排序
+	int min=rank[0];
+	int index_min=0;
+	for(int i=1;i<4;++i){
+		if(min>rank[i]){
+			min=rank[i];
+			index_min=i;
+		}
+	}
+	cout<<min<<" ";
+	switch(index_min){
+	case 0:
+		cout<<"A"<<endl;
+		break;
+	case 1:
+		cout<<"C"<<endl;
+		break;
+	case 2:
+		cout<<"M"<<endl;
+		break;
+	case 3:
+		cout<<"E"<<endl;
+		break;
+	default:
+		break;
+	}
+}
+int main(){
+	int N,M1;
+	cin>>N>>M1;
+	string student_id;
+	int A,C,M,E;
+	vector<Student_info> vec;
+	vector<string> vecM;
+	for(int i=0;i<N;++i){
+		cin>>student_id>>C>>M>>E;
+		Student_info s;
+		s.student_id=student_id;
+		s.C=C;
+		s.M=M;
+		s.E=E;
+		s.A=(C+M+E)/3;
+		vec.push_back(s);
+	}
+	for(int i=0;i<M1;++i){
+		cin>>student_id;
+		vecM.push_back(student_id);
+	}
+	for(int i=0;i<vecM.size();++i){
+		determine_best_rank(vecM[i],vec);
+	}
+
+	return 0;
+}
+```
