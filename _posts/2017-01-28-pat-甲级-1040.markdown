@@ -1,0 +1,98 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1040!"
+
+---
+# 1040. Longest Symmetric String (25)
+
+​    时间限制  
+
+​    400 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CHEN, Yue
+
+Given a string, you are supposed to output the length of the longest symmetric sub-string. For example, given "Is PAT&TAP symmetric?", the longest symmetric sub-string is "s PAT&TAP s", hence you must output 11.
+
+**Input Specification:**
+
+Each input file contains one test case which gives a non-empty string of length no more than 1000.
+
+**Output Specification:**
+
+For each test case, simply print the maximum length in a line.
+
+Sample Input:
+
+```
+Is PAT&TAP symmetric?
+
+```
+
+Sample Output:
+
+```
+11
+```
+
+代码如下：
+
+从开头出标记，从尾部开始遍历
+
+```c++
+#include<iostream> 
+#include<string>
+using namespace std;
+
+
+int main(){
+	string str;
+	getline(cin,str);
+	int maxlength=0;
+	for(int i=0;i<str.length();++i){
+		
+		int flag=0;
+		for(int j=str.size()-1;j>=0;--j){
+			int indexi=i;
+			int indexj=j;
+			while(str[indexj]==str[indexi]&&indexi<=indexj){
+				int cha=indexj-indexi;				
+				if(cha==0){					
+					if(((indexi-i)*2+1)>maxlength){
+						flag=1;
+						maxlength=(indexi-i)*2+1;
+					}
+					break;
+				}else if(cha==1){					
+					if(((indexj-i)*2)>maxlength){
+						flag=1;
+						maxlength=(indexj-i)*2;
+					}
+					break;
+				}
+				--indexj;++indexi;				
+			}
+			if(flag==1) break;	
+		}
+		
+	}
+	printf("%d",maxlength);
+	return 0;
+}
+```
+
+
+

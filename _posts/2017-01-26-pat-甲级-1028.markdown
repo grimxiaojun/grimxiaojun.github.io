@@ -1,0 +1,186 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1028!"
+
+---
+# 1028. List Sorting (25)
+
+Excel can sort records according to any column.  Now you are supposed to imitate this function.
+
+**Input**
+
+Each input file contains one test case.  For each case, the first line contains two integers N (<=100000) and C, where N is the number of records and C is the column that you are supposed to sort the records with.  Then N lines follow, each contains a record of a student.  A student's record consists of his or her distinct ID (a 6-digit number), name (a string with no more than 8 characters without space), and grade (an integer between 0 and 100, inclusive).
+
+**Output**
+
+For each test case, output the sorting result in N lines.  That is, if C = 1 then the records must be sorted in increasing order according to ID's; if C = 2 then the records must be sorted in non-decreasing order according to names; and if C = 3 then the records must be sorted in non-decreasing order according to grades.  If there are several students who have the same name or grade, they must be sorted according to their ID's in increasing order.
+
+Sample Input 1
+
+```
+3 1
+000007 James 85
+000010 Amy 90
+000001 Zoe 60
+
+```
+
+Sample Output 1
+
+```
+000001 Zoe 60
+000007 James 85
+000010 Amy 90
+
+```
+
+Sample Input 2
+
+```
+4 2
+000007 James 85
+000010 Amy 90
+000001 Zoe 60
+000002 James 98
+
+```
+
+Sample Output 2
+
+```
+000010 Amy 90
+000002 James 98
+000007 James 85
+000001 Zoe 60
+
+```
+
+Sample Input 3
+
+```
+4 3
+000007 James 85
+000010 Amy 90
+000001 Zoe 60
+000002 James 90
+
+```
+
+Sample Output 3
+
+```
+000001 Zoe 60
+000007 James 85
+000002 James 90
+000010 Amy 90
+```
+
+
+
+代码如下：
+
+最开始最后一个点超时
+
+将输入输出换成scanf,与printf便通过
+
+```c++
+#include<cstdio>
+#include<vector>
+#include<algorithm>
+#include<cstring>
+using namespace std;
+
+class Student{
+public:
+	int number_ID;
+	char name[10];
+	int score;
+	bool operator <(const Student &s)const{
+		return   number_ID < s.number_ID;
+	}
+};
+bool secorder(const Student &s1,const Student &s2){
+	return strcmp(s1.name,s2.name)<=0;
+}
+bool thirdorder(const Student &s1,const Student &s2){
+
+	return s1.score <= s2.score;
+}
+
+int main(){
+	int N,which;
+	scanf("%d%d",&N,&which);
+	vector<Student> vec;
+	char name[10];
+	int ID;
+	int score;
+	for(int i=0;i<N;++i){
+
+		
+		Student s;
+		scanf("%d%s%d",&s.number_ID,&s.name,&s.score);	
+		vec.push_back(s);
+		
+	}	
+	switch(which){
+	case 1:
+		sort(vec.begin(),vec.end());
+		break;
+	case 2:
+		sort(vec.begin(),vec.end(),secorder);
+		break;
+	case 3:
+		sort(vec.begin(),vec.end(),thirdorder);
+		break;
+	default:
+		break;
+	}
+	
+	for(int i=0;i<N;++i){
+		printf("%06d %s %d\n",vec[i].number_ID,vec[i].name,vec[i].score);
+	}
+	
+	return 0;
+}
+
+```
+在网上有一份代码是用的结构体，我不喜欢用结构体是因为我最开始是用JAVA写代码。。。代码参照[1028. List Sorting (25)-PAT甲级真题](http://www.liuchuo.net/archives/2120)
+
+```c++
+#include<cstdio>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+#define MAX 100001
+
+struct NODE{
+	int ID;
+	char name[10];
+	int score;
+}node[MAX];
+
+int which;
+bool cmp(NODE a,NODE b){
+	if(which==1){
+		return a.ID < b.ID;
+	}else if(which==2){
+		return strcmp(a.name,b.name)<=0;
+	}else{
+		return a.score<=b.score;
+	}
+}
+
+int main(){
+	int N;
+	scanf("%d%d",&N,&which);
+	for(int i=0;i<N;++i){
+		scanf("%d%s%d",&node[i].ID,&node[i].name,&node[i].score);
+	}
+	sort(node,node+N,cmp);
+	for(int i=0;i<N;++i){
+		printf("%06d %s %d\n",node[i].ID,node[i].name,node[i].score);
+	}
+}
+```

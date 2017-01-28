@@ -1,0 +1,92 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1037!"
+
+---
+# 1037. Magic Coupon (25)
+
+The magic shop in Mars is offering some magic coupons.  Each coupon has an integer N printed on it, meaning that when you use this coupon with a product, you may get N times the value of that product back!  What is more, the shop also offers some bonus product for free.  However, if you apply a coupon with a positive N to this bonus product, you will have to pay the shop N times the value of the bonus product... but hey, magically, they have some coupons with negative N's! 
+
+For example, given a set of coupons {1 2 4 -1}, and a set of product values {7 6 -2 -3} (in Mars dollars M$) where a negative value corresponds to a bonus product.  You can apply coupon 3 (with N being 4) to product 1 (with value M$7) to get M$28 back; coupon 2 to product 2 to get M$12 back; and coupon 4 to product 4 to get M$3 back.  On the other hand, if you apply coupon 3 to product 4, you will have to pay M$12 to the shop.
+
+Each coupon and each product may be selected at most once.  Your task is to get as much money back as possible.
+
+**Input Specification:**
+
+Each input file contains one test case.  For each case, the first line contains the number of coupons NC, followed by a line with NC coupon integers.  Then the next line contains the number of products NP, followed by a line with NP product values.  Here 1<= NC, NP <= 105, and it is guaranteed that all the numbers will not exceed 230. 
+
+**Output Specification:**
+
+For each test case, simply print in a line the maximum amount of money you can get back.
+
+Sample Input:
+
+```
+4
+1 2 4 -1
+4
+7 6 -2 -3
+
+```
+
+Sample Output:
+
+```
+43
+```
+
+代码如下：
+
+```c++
+#include<cstdio>
+#include<iostream>
+#include<string>
+#include<vector>
+#include<algorithm>
+using namespace std;
+int main(){
+	int nc,np;
+	scanf("%d",&nc);
+	long long value;
+	vector<long long> nc1;
+	vector<long long> nc2;
+	vector<long long> np1;
+	vector<long long> np2;
+	for(int i=0;i<nc;++i){
+		scanf("%lld",&value);
+		if(value>=0){
+			nc1.push_back(value);
+		}else{
+			nc2.push_back(value);
+		}
+	}
+	scanf("%d",&np);
+	for(int i=0;i<np;++i){
+		scanf("%lld",&value);
+		if(value>0){
+			np1.push_back(value);
+		}else{
+			np2.push_back(value);
+		}
+	}
+	sort(nc1.begin(),nc1.end());
+	sort(nc2.begin(),nc2.end());
+	sort(np1.begin(),np1.end());
+	sort(np2.begin(),np2.end());
+	long long sum=0;
+	if(nc1.size()&&np1.size()){
+			for(int i=nc1.size()-1,j=np1.size()-1;i>=0&&j>=0;--i,--j){
+				sum+=nc1[i]*np1[j];
+			}
+	}
+	if(nc2.size()&&np2.size()){
+		for(int i=0,j=0;i<nc2.size()&&j<np2.size();++i,++j){
+			sum+=nc2[i]*np2[j];
+		}
+	}
+	printf("%lld",sum);
+	return 0;
+}
+```
+
+

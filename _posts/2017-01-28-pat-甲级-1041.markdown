@@ -1,0 +1,102 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1041!"
+
+---
+# 1041. Be Unique (20)
+
+​    时间限制  
+
+​    100 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CHEN, Yue
+
+Being unique is so important to people on Mars that even their lottery is designed in a unique way.  The rule of winning is simple: one bets on a number chosen from [1, 104].  The first one who bets on a unique number wins.  For example, if there are 7 people betting on 5 31 5 88 67 88 17, then the second one who bets on 31 wins.
+
+**Input Specification:**
+
+Each input file contains one test case.  Each case contains a line which begins with a positive integer N (<=105) and then followed by N bets.  The numbers are separated by a space.
+
+**Output Specification:**
+
+For each test case, print the winning number in a line.  If there is no winner, print "None" instead.
+
+Sample Input 1:
+
+```
+7 5 31 5 88 67 88 17
+
+```
+
+Sample Output 1:
+
+```
+31
+
+```
+
+Sample Input 2:
+
+```
+5 888 666 666 888 888
+
+```
+
+Sample Output 2:
+
+```
+None
+```
+
+代码如下：
+
+由于时间限制为100ms,所以就要注意时间复杂度了，如果时间复杂度为O(n^2)的应该是不行了，我下面是用的用一个vector存输入的数，一个vector用于计数，
+
+若是数==1，则独一无二，输出第一个即可
+
+```c++
+#include<cstdio>
+#include<vector>
+using namespace std;
+int main(){
+	int n;
+	scanf("%d",&n);
+	vector<int> vec(100001,0);
+	vector<int> vec1;
+	int num;
+	for(int i=0;i<n;++i){
+		scanf("%d",&num);
+		++vec[num];
+		vec1.push_back(num);
+	}
+	int flag=0;
+	for(int i=0;i<vec1.size();++i){
+		if(vec[vec1[i]]==1){
+			flag=1;
+			printf("%d",vec1[i]);
+			return 0;
+		}
+	}
+	if(flag==0){
+		printf("None");
+	}
+	return 0;
+}
+```
+
+
+

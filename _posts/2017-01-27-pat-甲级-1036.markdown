@@ -1,0 +1,143 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1036!"
+
+---
+# 1036. Boys vs Girls (25)
+
+​    时间限制  
+
+​    400 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CHEN, Yue
+
+This time you are asked to tell the difference between the lowest grade of all the male students and the highest grade of all the female students.
+
+**Input Specification:**
+
+Each input file contains one test case.  Each case contains a positive integer N, followed by N lines of student information.  Each line contains a student's name, gender, ID and grade, separated by a space, where name and ID are strings of no more than 10 characters with no space, gender is either F (female) or M (male), and grade is an integer between 0 and 100.  It is guaranteed that all the grades are distinct.
+
+**Output Specification:**
+
+For each test case, output in 3 lines.  The first line gives the name and ID of the female student with the highest grade, and the second line gives that of the male student with the lowest grade.  The third line gives the difference gradeF-gradeM.  If one such kind of student is missing, output "Absent" in the corresponding line, and output "NA" in the third line instead.
+
+**Sample Input 1:**
+
+```
+3
+Joe M Math990112 89
+Mike M CS991301 100
+Mary F EE990830 95
+
+```
+
+Sample Output 1:
+
+```
+Mary EE990830
+Joe Math990112
+6
+
+```
+
+Sample Input 2:
+
+```
+1
+Jean M AA980920 60
+
+```
+
+Sample Output 2:
+
+```
+Absent
+Jean AA980920
+NA
+```
+
+代码如下
+
+```c++
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+
+using namespace std;
+
+class Student{
+public:
+	string name;
+	string gender;
+	string ID;
+	int grade;
+	bool operator <(const Student &s)const{
+		return grade < s.grade;
+	}
+};
+
+
+int main(){
+	int n;
+	scanf("%d",&n);
+	vector<Student> vec_male;
+	vector<Student> vec_female;
+	string name,gender,ID;
+	int grade;
+	for(int i=0;i<n;++i){
+		cin>>name>>gender>>ID>>grade;
+		Student s;
+		s.name=name;
+		s.gender=gender;
+		s.ID=ID;
+		s.grade=grade;
+		if(gender=="M"){
+			vec_male.push_back(s);
+		}else{
+			vec_female.push_back(s);
+		}
+	}
+	if(vec_female.size()==0){
+		printf("Absent\n");
+		if(vec_male.size()==0){
+			printf("Absent\n");
+			
+		}else{
+			sort(vec_male.begin(),vec_male.end());
+			cout<<vec_male[0].name<<" "<<vec_male[0].ID<<endl;
+		}
+		printf("NA");
+	}else{
+		sort(vec_female.begin(),vec_female.end());
+		cout<<vec_female[vec_female.size()-1].name<<" "<<vec_female[vec_female.size()-1].ID<<endl;
+		if(vec_male.size()==0){
+			printf("Absent\n");
+			printf("NA");
+		}else{
+			sort(vec_male.begin(),vec_male.end());
+			cout<<vec_male[0].name<<" "<<vec_male[0].ID<<endl;
+			printf("%d",vec_female[vec_female.size()-1].grade-vec_male[0].grade);
+		}
+		
+	}
+	return 0;
+}
+```
+
+

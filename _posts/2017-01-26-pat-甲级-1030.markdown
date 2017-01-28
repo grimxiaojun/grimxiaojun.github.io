@@ -1,0 +1,147 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1030!"
+
+---
+# 1030. Travel Plan (30)
+
+A traveler's map gives the distances between cities along the highways, together with the cost of each highway.  Now you are supposed to write a program to help a traveler to decide the shortest path between his/her starting city and the destination.  If such a shortest path is not unique, you are supposed to output the one with the minimum cost, which is guaranteed to be unique.
+
+**Input Specification:**
+
+Each input file contains one test case. Each case starts with a line containing 4 positive integers N, M, S, and D, where N (<=500) is the number of cities (and hence the cities are numbered from 0 to N-1); M is the number of highways; S and D are the starting and the destination cities, respectively.  Then M lines follow, each provides the information of a highway, in the format:
+
+City1 City2 Distance Cost
+
+where the numbers are all integers no more than 500, and are separated by a space.
+
+**Output Specification:**
+
+For each test case, print in one line the cities along the shortest path from the starting point to the destination, followed by the total distance and the total cost of the path.  The numbers must be separated by a space and there must be no extra space at the end of output.
+
+Sample Input
+
+```
+4 5 0 3
+0 1 1 20
+1 3 2 30
+0 3 4 10
+0 2 2 20
+2 3 1 20
+
+```
+
+Sample Output
+
+```
+0 2 3 3 40
+```
+
+代码如下：
+
+只需要利用Dijkstra
+
+有path[],cos1[],dist[]------有路径，花费，距离数组保存相应数值
+
+主要还是使Dijkstra变换一下就OK
+
+```c++
+#include<cstdio>
+#include<cstring>
+#include<vector>
+using namespace std;
+
+
+#define MAX 500
+
+int map[MAX][MAX];
+int cos1t[MAX][MAX];
+
+int path[MAX];
+int dist[MAX];
+int cos1[MAX];
+int collection[MAX];
+
+int N,M,S,D;
+
+
+void Dijkstra(int s){
+//	collection[s]=1;
+	path[s]=-1;
+	cos1[s]=0;
+	dist[s]=0;
+	while(1){
+		int min=501;
+		int flag=0;
+		int index;
+		for(int i=0;i<N;++i){
+			if(!collection[i]){
+				if(dist[i]<min){
+					min=dist[i];
+					index=i;
+					flag=1;
+				}
+			}
+		}
+		if(flag==0){
+			break;
+		}
+		collection[index]=1;
+		for(int j=0;j<N;++j){
+			if(!collection[j]&&map[index][j]){
+
+				if(dist[j]>(dist[index]+map[index][j])){
+					dist[j]=dist[index]+map[index][j];					
+					path[j]=index;
+					cos1[j]=cos1[index]+cos1t[index][j];
+				//	printf("%d %d %d %d\n",index,j,dist[j],cos1[j]);
+				}else if(dist[j]==(dist[index]+map[index][j])){
+					if(cos1[j]>cos1[index]+cos1t[index][j]){
+						cos1[j]=cos1[index]+cos1t[index][j];
+						path[j]=index;						
+					}
+				}
+			}
+		}
+
+	}
+}
+
+
+int main(){
+
+	scanf("%d%d%d%d",&N,&M,&S,&D);
+	int c1,c2,distance,money;
+	for(int i=0;i<M;++i){
+		scanf("%d%d%d%d",&c1,&c2,&distance,&money);
+		map[c1][c2]=distance;
+		map[c2][c1]=distance;
+		cos1t[c1][c2]=money;
+		cos1t[c2][c1]=money;
+	}
+
+	for(int i=0;i<N;++i){
+		path[i]=-1;
+		dist[i]=501;
+		cos1[i]=501;
+	}
+
+	Dijkstra(S);
+	int p;
+	p=D;
+	vector<int> vec;
+	vec.push_back(D);
+	while(path[p]!=-1){		
+		vec.push_back(path[p]);
+		p=path[p];
+	}
+	for(int i=vec.size()-1;i>=0;--i){
+		printf("%d ",vec[i]);
+	}
+	printf("%d %d",dist[D],cos1[D]);
+	
+	return 0;
+}
+```
+
+

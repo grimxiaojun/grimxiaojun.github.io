@@ -1,0 +1,74 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1038!"
+
+---
+# 1038. Recover the Smallest Number (30)
+
+Given a collection of number segments, you are supposed to recover the smallest number from them. For example, given {32, 321, 3214, 0229, 87}, we can recover many numbers such like 32-321-3214-0229-87 or 0229-32-87-321-3214 with respect to different orders of combinations of these segments, and the smallest number is 0229-321-3214-32-87.
+
+**Input Specification:**
+
+Each input file contains one test case.  Each case gives a positive integer N (<=10000) followed by N number segments.  Each segment contains a non-negative integer of no more than 8 digits.  All the numbers in a line are separated by a space.
+
+**Output Specification:**
+
+For each test case, print the smallest number in one line.  Do not output leading zeros.
+
+Sample Input:
+
+```
+5 32 321 3214 0229 87
+
+```
+
+Sample Output:
+
+```
+22932132143287
+```
+
+代码如下：
+
+这次让我加深了对algorithm中的sort有了更深的理解，本来觉得已经会用了，但是今天然我发现还是对它所用的场景有很多欠缺点
+
+```c++
+#include<iostream>
+#include<string>
+#include<vector>
+#include<algorithm>
+
+using namespace std;
+
+bool less_than(string s1,string s2){
+	return s1+s2<s2+s1;
+}
+
+int main(){
+	int n;
+	scanf("%d",&n);
+	vector<string> vec;
+	string value;
+	string final="";
+	for(int i=0;i<n;++i){
+		cin>>value;
+		vec.push_back(value);
+	}
+	sort(vec.begin(),vec.end(),less_than);
+	for(int i=0;i<vec.size();++i){
+		final+=vec[i];
+	}
+	while(final.size()!=0&&final[0]=='0'){
+		final.erase(final.begin());
+	}
+	if(final.size()==0){
+		cout<<0;
+	}else{
+		cout<<final;
+	}
+	return 0;
+}
+```
+
+参照了[1038. Recover the Smallest Number (30)-PAT甲级真题（贪心算法）](http://www.liuchuo.net/archives/2303)
+

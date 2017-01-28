@@ -1,0 +1,135 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1032!"
+
+---
+# 1032. Sharing (25)
+
+To store English words, one method is to use linked lists and store a word letter by letter.  To save some space, we may let the words share the same sublist if they share the same suffix.  For example, "loading" and "being" are stored as showed in Figure 1.
+
+![img](https://www.patest.cn/upload/1w_m16pjsommxz.jpg)
+Figure 1
+
+You are supposed to find the starting position of the common suffix (e.g. the position of "i" in Figure 1).
+
+**Input Specification:**
+
+Each input file contains one test case.  For each case, the first line contains two addresses of nodes and a positive N (<= 105), where the two addresses are the addresses of the first nodes of the two words, and N is the total number of nodes.  The address of a node is a 5-digit positive integer, and NULL is represented by -1.
+
+Then N lines follow, each describes a node in the format:
+
+*Address Data Next*
+
+where *Address* is the position of the node, *Data* is the letter contained by this node which is an English letter chosen from {a-z, A-Z}, and *Next* is the position of the next node.
+
+**Output Specification:**
+
+For each case, simply output the 5-digit starting position of the common suffix.  If the two words have no common suffix, output "-1" instead.
+
+Sample Input 1:
+
+```
+11111 22222 9
+67890 i 00002
+00010 a 12345
+00003 g -1
+12345 D 67890
+00002 n 00003
+22222 B 23456
+11111 L 00001
+23456 e 67890
+00001 o 00010
+
+```
+
+Sample Output 1:
+
+```
+67890
+
+```
+
+Sample Input 2:
+
+```
+00001 00002 4
+00001 a 10001
+10001 s -1
+00002 a 10002
+10002 t -1
+
+```
+
+Sample Output 2:
+
+```
+-1
+```
+
+代码如下：
+
+利用两个vector装第一次，与第二次
+
+从后开始遍历，直到不相同
+
+```c++
+#include<cstdio>
+#include<vector>
+#include<cstring>
+using namespace std;
+#define MAX 100001
+struct Node{
+	int address;
+	char data;
+	int  next;
+}node[MAX];
+int collection[MAX];
+int n;
+vector<int>  get_list(int address){
+	int currentaddress=address;
+	memset(collection,0,sizeof(collection));
+	vector<int> vec;	
+	while(1){
+		int flag=0;
+		for(int i=0;i<n;++i){
+			if(!collection[i]&&currentaddress==node[i].address){
+				collection[i]=1;
+				vec.push_back(currentaddress);
+				flag=1;
+				currentaddress=node[i].next;
+			}
+		}		
+		if(flag==0) break;
+	}
+	return vec;
+}
+int main(){
+	int firstaddress,secaddress;
+	scanf("%d%d%d",&firstaddress,&secaddress,&n);
+	for(int i=0;i<n;++i){
+		scanf("%d%s%d",&node[i].address,&node[i].data,&node[i].next);
+	}
+	int currentaddress=firstaddress;
+	int flag=0;
+	vector<int> vec1;
+	vector<int> vec2;
+	vec1=get_list(firstaddress);
+	vec2=get_list(secaddress);
+	int index=-1;
+	for(int i=vec1.size()-1,j=vec2.size()-1;i>=0&&j>=0;--i,--j){
+		if(vec1[i]==vec2[j]){
+			index=vec1[i];
+		}else{
+			break;
+		}
+	}
+	if(index!=-1){
+		printf("%05d",index);
+	}else{
+		printf("-1");
+	}
+	return 0;
+}
+```
+
+
