@@ -1,0 +1,324 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1108&1116!"
+
+---
+# 1108. Finding Average (20)
+
+​    时间限制  
+
+​    400 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CHEN, Yue
+
+The basic task is simple: given N real numbers, you are supposed to calculate their average.  But what makes it complicated is that some of the input numbers might not be legal.  A "legal" input is a real number in [-1000, 1000] and is accurate up to no more than 2 decimal places.  When you calculate the average, those illegal numbers must not be counted in.
+
+**Input Specification:**
+
+Each input file contains one test case.  For each case, the first line gives a positive integer N (<=100).  Then N numbers are given in the next line, separated by one space.
+
+**Output Specification:**
+
+For each illegal input number, print in a line "ERROR: X is not a legal number" where X is the input.  Then finally print in a line the result: "The average of K numbers is Y" where K is the number of legal inputs and Y is their average, accurate to 2 decimal places.  In case the average cannot be calculated, output "Undefined" instead of Y.  In case K is only 1, output "The average of 1 number is Y" instead.
+
+Sample Input 1:
+
+```
+7
+5 -3.2 aaa 9999 2.3.4 7.123 2.35
+
+```
+
+Sample Output 1:
+
+```
+ERROR: aaa is not a legal number
+ERROR: 9999 is not a legal number
+ERROR: 2.3.4 is not a legal number
+ERROR: 7.123 is not a legal number
+The average of 3 numbers is 1.38
+
+```
+
+Sample Input 2:
+
+```
+2
+aaa -9999
+
+```
+
+Sample Output 2:
+
+```
+ERROR: aaa is not a legal number
+ERROR: -9999 is not a legal number
+The average of 0 numbers is Undefined
+```
+
+代码如下：
+
+sscanf()可将字符串转为特定类型
+
+sprintf()打印
+
+```c++
+#include<cstdio>
+#include<cstring>
+using namespace std;
+
+
+int main(){
+	int n;
+	scanf("%d",&n);
+	int count=0;
+	char a[100],b[100];
+	
+	double value,sum=0.00;
+	for(int i=0;i<n;++i){
+		scanf("%s",a);
+		sscanf(a,"%lf",&value);
+		sprintf(b,"%0.2lf",value);
+		int flag=0;
+		for(int j=0;j<strlen(a);++j){
+			if(a[j]!=b[j]){
+				flag=1;
+			}
+		}
+		if(flag||value<-1000||value>1000){
+			printf("ERROR: %s is not a legal number\n",a);
+		}else{
+			count++;
+			sum+=value;
+		}
+	}
+	if(count!=1&&count!=0){
+		printf("The average of %d numbers is %0.2lf",count,sum/count);
+	}else if(count==1){
+		printf("The average of 1 number is %0.2lf\n",sum);
+	}else{
+		printf("The average of 0 numbers is Undefined\n");
+	}
+	return 0;
+}
+```
+参考了[1108. Finding Average (20)-PAT甲级真题](http://www.liuchuo.net/archives/1924)
+
+# 1116. Come on! Let's C (20)
+
+​    时间限制  
+
+​    200 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CHEN, Yue
+
+"Let's C" is a popular and fun programming contest hosted by the College of Computer Science and Technology, Zhejiang University.  Since the idea of the contest is for fun, the award rules are funny as the following:
+
+\0. The Champion will receive a "Mystery Award" (such as a BIG collection of students' research papers...).
+\1. Those who ranked as a prime number will receive the best award -- the Minions (小黄人)!
+\2. Everyone else will receive chocolates.
+
+Given the final ranklist and a sequence of contestant ID's, you are supposed to tell the corresponding awards.
+
+**Input Specification:**
+
+Each input file contains one test case.  For each case, the first line gives a positive integer N (<=10000), the total number of contestants.  Then N lines of the ranklist follow, each in order gives a contestant's ID (a 4-digit number).  After the ranklist, there is a positive integer K followed by K query ID's.
+
+**Output Specification:**
+
+For each query, print in a line "ID: award" where the award is "Mystery Award", or "Minion", or "Chocolate".  If the ID is not in the ranklist, print "Are you kidding?" instead.  If the ID has been checked before, print "ID: Checked".
+
+Sample Input:
+
+```
+6
+1111
+6666
+8888
+1234
+5555
+0001
+6
+8888
+0001
+1111
+2222
+8888
+2222
+
+```
+
+Sample Output:
+
+```
+8888: Minion
+0001: Chocolate
+1111: Mystery Award
+2222: Are you kidding?
+8888: Checked
+2222: Are you kidding?
+```
+
+# 1116. Come on! Let's C (20)
+
+​    时间限制  
+
+​    200 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CHEN, Yue
+
+"Let's C" is a popular and fun programming contest hosted by the College of Computer Science and Technology, Zhejiang University.  Since the idea of the contest is for fun, the award rules are funny as the following:
+
+\0. The Champion will receive a "Mystery Award" (such as a BIG collection of students' research papers...).
+\1. Those who ranked as a prime number will receive the best award -- the Minions (小黄人)!
+\2. Everyone else will receive chocolates.
+
+Given the final ranklist and a sequence of contestant ID's, you are supposed to tell the corresponding awards.
+
+**Input Specification:**
+
+Each input file contains one test case.  For each case, the first line gives a positive integer N (<=10000), the total number of contestants.  Then N lines of the ranklist follow, each in order gives a contestant's ID (a 4-digit number).  After the ranklist, there is a positive integer K followed by K query ID's.
+
+**Output Specification:**
+
+For each query, print in a line "ID: award" where the award is "Mystery Award", or "Minion", or "Chocolate".  If the ID is not in the ranklist, print "Are you kidding?" instead.  If the ID has been checked before, print "ID: Checked".
+
+Sample Input:
+
+```
+6
+1111
+6666
+8888
+1234
+5555
+0001
+6
+8888
+0001
+1111
+2222
+8888
+2222
+
+```
+
+Sample Output:
+
+```
+8888: Minion
+0001: Chocolate
+1111: Mystery Award
+2222: Are you kidding?
+8888: Checked
+2222: Are you kidding?
+```
+
+代码：
+
+```c++
+#include<iostream>
+#include<vector>
+#include<string>
+
+using namespace std;
+
+bool isprime(int value){
+	if(value==2) return true;
+	for(int i=2;i*i<=value;++i){
+		if(value%i==0){
+			return false;
+		}
+	}
+	return true;
+}
+
+
+
+int main(){
+	int n;
+	scanf("%d",&n);
+	int id;
+	vector<string> vec[10000];
+	for(int i=1;i<=n;++i){
+		scanf("%d",&id);		
+		if(i==1){			
+			vec[id].push_back("Mystery Award");
+			continue;
+		}
+		if(isprime(i)){
+			
+			vec[id].push_back("Minion");
+			continue;
+		}
+		vec[id].push_back("Chocolate");
+		
+	}
+	int query;
+	scanf("%d",&query);
+	vector<int> vec1;
+	for(int i=0;i<query;++i){
+		scanf("%d",&id);
+		vec1.push_back(id);
+	}
+	
+	for(int i=0;i<vec1.size();++i){
+		printf("%04d",vec1[i]);
+		if(vec[vec1[i]].size()!=0){
+			if(vec[vec1[i]][0]!="1"){				
+				cout<<": "<<vec[vec1[i]][0]<<endl;
+				vec[vec1[i]][0]="1";
+			}else{
+				cout<<": Checked"<<endl;
+			}
+		}else{
+			cout<<": Are you kidding?"<<endl;
+		}
+	}
+
+
+	return 0;
+}
+```

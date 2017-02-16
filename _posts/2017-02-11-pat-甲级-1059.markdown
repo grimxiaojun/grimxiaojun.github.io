@@ -1,0 +1,89 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1059!"
+
+---
+# 1059. Prime Factors (25)
+
+​    时间限制  
+
+​    100 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      HE, Qinming
+
+Given any positive integer N, you are supposed to find all of its prime factors, and write them in the format N = p1^k1 * p2^k2 *…*pm^km.
+
+**Input Specification:**
+
+Each input file contains one test case which gives a positive integer N in the range of long int.
+
+**Output Specification:**
+
+Factor N in the format N = p1^k1 * p2^k2 *…*pm^km, where pi's are prime factors of N in increasing order, and the exponent ki is the number of pi -- hence when there is only one pi, ki is 1 and must NOT be printed out.
+
+Sample Input:
+
+```
+97532468
+
+```
+
+Sample Output:
+
+```
+97532468=2^2*11*17*101*1291
+```
+
+找出一个数的所有质数，输入为1等于1，从2开始找,value先排2，再排3，依次往后排，因为是从小到大开始排，所以除的必定是质数，利用cnt判断有多少个，利用flag判断是否为因子，flag1判断第一个用于输出*
+
+代码如下
+
+```c++
+#include<iostream>
+using namespace std;
+int main(){
+	long value;
+	scanf("%ld",&value);
+	printf("%ld=",value);
+	if(value==1) printf("1");
+	int flag1=0;
+	for(long i=2;value>=2;++i){
+		int flag=0;long cnt=0;
+		while(value%i==0){
+			++cnt;
+			flag=1;
+			value/=i;
+		}
+		if(flag==1){
+			if(flag1==1){
+				printf("*");
+			}
+			printf("%ld",i);
+			flag1=1;
+		}
+		if(cnt>=2){
+			printf("^%ld",cnt);
+		}
+	}
+	return 0;
+}
+```
+
+下面文章的代码未简化
+
+[1059. Prime Factors (25)-PAT甲级真题（素数表的建立）](http://www.liuchuo.net/archives/2289)
+

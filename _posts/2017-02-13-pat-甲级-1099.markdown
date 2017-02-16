@@ -1,0 +1,119 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1099!"
+
+---
+# 1099. Build A Binary Search Tree (30)
+
+​    时间限制  
+
+​    100 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CHEN, Yue
+
+A Binary Search Tree (BST) is recursively defined as a binary tree which has the following properties:
+
+The left subtree of a node contains only nodes with keys less than the node's key.
+
+The right subtree of a node contains only nodes with keys greater than or equal to the node's key.
+
+Given the structure of a binary tree and a sequence of distinct integer keys, there is only one way to fill these keys into the tree so that the resulting tree satisfies the definition of a BST.  You are supposed to output the level order traversal sequence of that tree.  The sample is illustrated by Figure 1 and 2.
+
+![img](https://www.patest.cn/upload/h8_nkqjeu5lglo.jpg)
+
+**Input Specification:**
+
+Each input file contains one test case.  For each case, the first line gives a positive integer N (<=100) which is the total number of nodes in the tree.  The next N lines each contains the left and the right children of a node in the format "left_index right_index", provided that the nodes are numbered from 0 to N-1, and 0 is always the root.  If one child is missing, then -1 will represent the NULL child pointer.  Finally N distinct integer keys are given in the last line.
+
+**Output Specification:**
+
+For each test case, print in one line the level order traversal sequence of that tree.  All the numbers must be separated by a space, with no extra space at the end of the line.
+
+Sample Input:
+
+```
+9
+1 6
+2 3
+-1 -1
+-1 4
+5 -1
+-1 -1
+7 -1
+-1 8
+-1 -1
+73 45 11 58 82 25 67 38 42
+```
+
+Sample Output:
+
+```
+58 25 82 11 38 67 45 73 42
+ 
+```
+
+此题为给你一颗构造好的BST，让你放置数，然后输出层次遍历
+
+代码如下
+
+```c++
+#include<iostream>
+#include<vector>
+#include<queue>
+#include<algorithm>
+using namespace std;
+struct Node{
+	int key;
+	int leftchild;
+	int rightchild;
+}node[101];
+vector <int> v;
+int index1=0;
+void  bfs(int root,int index){
+	if(node[root].leftchild!=-1){
+		bfs(node[root].leftchild,2*index+1);
+	}
+	node[root].key=v[index1++];
+	if(node[root].rightchild!=-1){
+		bfs(node[root].rightchild,2*index+2);
+	}
+}
+int main(){	
+	int n;
+	scanf("%d",&n);
+	for(int i=0;i<n;++i){
+		scanf("%d%d",&node[i].leftchild,&node[i].rightchild);
+	}
+	v.resize(n);
+	for(int i=0;i<n;++i){
+		scanf("%d",&v[i]);
+	}
+	sort(v.begin(),v.end());
+	bfs(0,0);
+	queue<int>q;
+	q.push(0);
+	printf("%d",node[0].key);
+	while(!q.empty()){
+		int root=q.front();
+		q.pop();
+		if(root!=0) printf(" %d",node[root].key);
+		if(node[root].leftchild!=-1) q.push(node[root].leftchild);
+		if(node[root].rightchild!=-1) q.push(node[root].rightchild);
+	}
+}
+```
+

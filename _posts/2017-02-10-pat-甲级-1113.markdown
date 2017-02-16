@@ -1,0 +1,102 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1113!"
+
+---
+# 1113. Integer Set Partition (25)
+
+​    时间限制  
+
+​    150 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CHEN, Yue
+
+Given a set of N (> 1) positive integers, you are supposed to partition them into two disjoint sets A1 and A2 of n1 and n2 numbers, respectively.  Let S1 and S2 denote the sums of all the numbers in A1 and A2, respectively.  You are supposed to make the partition so that |n1 - n2| is minimized first, and then |S1 - S2| is maximized.
+
+**Input Specification:**
+
+Each input file contains one test case.  For each case, the first line gives an integer N (2 <= N <= 105), and then N positive integers follow in the next line, separated by spaces.  It is guaranteed that all the integers and their sum are less than 231.
+
+**Output Specification:**
+
+For each case, print in a line two numbers: |n1 - n2| and |S1 - S2|, separated by exactly one space.
+
+Sample Input 1:
+
+```
+10
+23 8 10 99 46 2333 46 1 666 555
+
+```
+
+Sample Output 1:
+
+```
+0 3611
+
+```
+
+Sample Input 2:
+
+```
+13
+110 79 218 69 3721 100 29 135 2 6 13 5188 85
+
+```
+
+Sample Output 2:
+
+```
+1 9359
+```
+
+此题仅仅是求大小，个数最小，相差值最大，只需要排个序，前面一部分s1，后面一部分s2，就ok
+
+代码如下
+
+```c++
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+int main(){
+	int n;
+	scanf("%d",&n);
+	vector<long long> vec;
+	long long value;
+	for(int i=0;i<n;++i){
+		scanf("%lld",&value);
+		vec.push_back(value);
+	}
+	sort(vec.begin(),vec.end());
+	long long s1=0,s2=0;
+	for(int i=0;i<vec.size();++i){
+		if(i<vec.size()/2){
+			s1+=vec[i];
+		}else{
+			s2+=vec[i];
+		}
+	}
+	if(n%2!=0){
+		printf("1 ");
+	}else{
+		printf("0 ");
+	}
+	printf("%lld",s2-s1);
+	return 0;
+}
+```

@@ -1,0 +1,256 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1101&1102!"
+
+---
+# 1101. Quick Sort (25)
+
+​    时间限制  
+
+​    200 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CAO, Peng
+
+There is a classical process named *partition* in the famous quick sort algorithm. In this process we typically choose one element as the pivot.  Then the elements less than the pivot are moved to its left and those larger than the pivot to its right. Given N distinct positive integers after a run of partition, could you tell how many elements could be the selected pivot for this partition?
+
+For example, given N = 5 and the numbers 1, 3, 2, 4, and 5.  We have:
+
+1 could be the pivot since there is no element to its left and all the elements to its right are larger than it;
+
+3 must not be the pivot since although all the elements to its 
+left are smaller, the number 2 to its right is less than it as well;
+
+2 must not be the pivot since although all the elements to its 
+right are larger, the number 3 to its left is larger than it as well;
+
+Hence in total there are 3 pivot candidates.
+
+**Input Specification:**
+
+Each input file contains one test case.  For each case, the first line gives a positive integer N (<= 105).  Then the next line contains N distinct positive integers no larger than 109.  The numbers in a line are separated by spaces.
+
+**Output Specification:**
+
+For each test case, output in the first line the number of pivot candidates.  Then in the next line print these candidates in increasing order.  There must be exactly 1 space between two adjacent numbers, and no extra space at the end of each line.
+
+Sample Input: 
+
+```
+5
+1 3 2 4 5
+
+```
+
+Sample Output:
+
+```
+3
+1 4 5
+```
+
+先利用sort()排序，再利用max清除剩下的
+
+注意点：最后一次需换行。。。否则扣4分。。。
+
+代码如下：
+
+```c++
+#include<cstdio>
+#include<vector>
+#include<algorithm>
+using namespace std;
+int main(){
+	int n;
+	scanf("%d",&n);
+	long long value;
+	vector<long long>vec;
+	vector<long long>vec1;
+	vector<long long> final_vec;
+	for(int i=0;i<n;++i){
+		scanf("%lld",&value);
+		vec.push_back(value);
+		vec1.push_back(value);
+	}
+	
+	
+	
+	sort(vec1.begin(),vec1.end());
+	int max=0;
+	for(int i=0;i<vec.size();++i){
+		if(vec[i]==vec1[i]&&vec1[i]>max){
+			final_vec.push_back(vec[i]);
+		}
+		if(vec[i]>max) max=vec[i];
+	}
+
+
+
+	printf("%d\n",final_vec.size());
+	for(int i=0;i<final_vec.size();++i){
+			if(i!=final_vec.size()-1){
+				printf("%lld ",final_vec[i]);
+			}else{
+				printf("%lld",final_vec[i]);
+			}
+	}
+	printf("\n");
+
+
+	
+	return 0;
+}
+```
+
+# 1102. Invert a Binary Tree (25)
+
+​    时间限制  
+
+​    400 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CHEN, Yue
+
+The following is from Max Howell @twitter:
+
+*Google: 90% of our engineers use the software you wrote (Homebrew), but you can't invert a binary tree on a whiteboard so fuck off.*
+
+Now it's your turn to prove that YOU CAN invert a binary tree!
+
+**Input Specification:**
+
+Each input file contains one test case. For each case, the first line gives a positive integer N (<=10) which is the total number of nodes in the tree -- and hence the nodes are numbered from 0 to N-1. Then N lines follow, each corresponds to a node from 0 to N-1, and gives the indices of the left and right children of the node. If the child does not exist, a "-" will be put at the position. Any pair of children are separated by a space.
+
+**Output Specification:**
+
+For each test case, print in the first line the level-order, and then in the second line the in-order traversal sequences of the inverted tree. There must be exactly one space between any adjacent numbers, and no extra space at the end of the line.
+
+Sample Input:
+
+```
+8
+1 -
+- -
+0 -
+2 7
+- -
+- -
+5 -
+4 6
+```
+
+Sample Output:
+
+```
+3 7 2 6 4 0 5 1
+6 5 7 4 3 2 0 1
+```
+
+首先利用结构体构建二叉树，找出根节点，（0-n-1）中没有输入的那个点就是根节点，找到根节点后开始遍历，再遍历途中，利用index下标进行层次遍历，利用中序遍历得出结果
+
+代码
+
+```c++
+#include<iostream>
+#include<string>
+#include<cstring>
+using namespace std;
+
+struct Node{
+	int parent;
+	int left;
+	int right;
+}node[11];
+
+int collection[10];
+int tree[2100];
+int inorder[10];
+int flag=0;
+void dfs(int root,int index){
+	tree[index]=root;
+	if(node[root].left!=-1){
+		dfs(node[root].left,2*index+1);
+	}
+	inorder[flag++]=root;
+	if(node[root].right!=-1){
+		dfs(node[root].right,2*index+2);
+	}
+}
+
+int main(){
+	
+	int n;
+	scanf("%d",&n);
+	getchar();
+	string s,s1,s2;
+	for(int i=0;i<n;++i){
+		getline(cin,s);
+		s1=s.substr(2,1);
+		s2=s.substr(0,1);
+		if(isdigit(s1[0])){
+			collection[s1[0]-'0']=1;
+			node[i].left=s1[0]-'0';
+		}else{
+			node[i].left=-1;
+		}
+		if(isdigit(s2[0])){
+			collection[s2[0]-'0']=1;
+			node[i].right=s2[0]-'0';
+		}else{
+			node[i].right=-1;
+		}
+	}
+	int root;
+	for(int i=0;i<n;++i){
+		if(collection[i]==0){
+			root=i;
+			break;
+		}
+	}
+	memset(tree,-1,sizeof(tree));
+	dfs(root,0);
+	printf("%d",tree[0]);
+	for(int i=1;i<2100;++i){
+		if(tree[i]!=-1){
+			printf(" %d",tree[i]);
+		}
+	}
+	printf("\n");
+	for(int i=0;i<n;++i){
+		if(i==0){
+			printf("%d",inorder[i]);
+		}else{
+			printf(" %d",inorder[i]);
+		}
+	}
+	printf("\n");
+	return 0;
+}
+
+```

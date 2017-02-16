@@ -1,0 +1,447 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1104&1105!"
+
+---
+# 1104. Sum of Number Segments (20)
+
+​    时间限制  
+
+​    200 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CAO, Peng
+
+Given a sequence of positive numbers, a *segment* is defined to be a consecutive subsequence.  For example, given the sequence {0.1, 0.2, 0.3, 0.4}, we have 10 segments: (0.1) (0.1, 0.2) (0.1, 0.2, 0.3) (0.1, 0.2, 0.3, 0.4) (0.2) (0.2, 0.3) (0.2, 0.3, 0.4) (0.3) (0.3, 0.4) (0.4).
+
+Now given a sequence, you are supposed to find the sum of all the numbers in all the segments.  For the previous example, the sum of all the 10 segments is 0.1 + 0.3 + 0.6 + 1.0 + 0.2 + 0.5 + 0.9 + 0.3 + 0.7 + 0.4 = 5.0.
+
+**Input Specification:**
+
+Each input file contains one test case.  For each case, the first line gives a positive integer N, the size of the sequence which is no more than 105.  The next line contains N positive numbers in the sequence, each no more than 1.0, separated by a space.
+
+**Output Specification:**
+
+For each test case, print in one line the sum of all the numbers in all the segments, accurate up to 2 decimal places.
+
+Sample Input:
+
+```
+4
+0.1 0.2 0.3 0.4 
+
+```
+
+Sample Output:
+
+```
+5.00
+```
+
+代码如下：
+
+注意点：用double不要用float
+
+```c++
+#include<cstdio>
+#include<iostream>
+using namespace std;
+
+int main(){
+	int n;
+	scanf("%d",&n);
+	double value;
+	double sum=0.00;
+	for(int i=0;i<n;++i){
+		cin>>value;
+		if(i==0||i==n-1){
+			sum+=value*n;
+		}else{
+			sum+=value*(n-i)*(i+1);	
+		}
+		
+	}
+	printf("%0.2f",sum);
+	return 0;
+}
+```
+
+
+
+# 1105. Spiral Matrix (25)
+
+​    时间限制  
+
+​    150 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CHEN, Yue
+
+This time your job is to fill a sequence of N positive integers into a **spiral matrix** in non-increasing order.  A **spiral matrix** is filled in from the first element at the upper-left corner, then move in a clockwise spiral.  The matrix has **m** rows and **n** columns, where **m** and **n** satisfy the following: **m*****n** must be equal to N; **m**>=**n**; and **m**-**n** is the minimum of all the possible values.
+
+**Input Specification:**
+
+Each input file contains one test case.  For each case, the first line gives a positive integer N.  Then the next line contains N positive integers to be filled into the spiral matrix.  All the numbers are no more than 104.  The numbers in a line are separated by spaces.
+
+**Output Specification:**
+
+For each test case, output the resulting matrix in **m** lines, each contains **n** numbers.  There must be exactly 1 space between two adjacent numbers, and no extra space at the end of each line.
+
+Sample Input:
+
+```
+12
+37 76 20 98 76 42 53 95 60 81 58 93
+
+```
+
+Sample Output:
+
+```
+98 95 93
+42 37 81
+53 20 76
+58 60 76
+```
+
+此题题意为螺旋复制
+
+有四步，先横再竖再横再竖，一直循环，知道所有空位被赋值
+
+代码如下：
+
+```c++
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+#define max 10001
+int matrix[max][max];
+bool cmp1(int a,int b){
+	return a>b;
+}
+int main(){
+	int N,m,n;
+	vector<int> vec;
+	scanf("%d",&N);
+	int value;
+	for(int i=0;i<N;++i){
+		scanf("%d",&value);
+		vec.push_back(value);		
+	}
+	sort(vec.begin(),vec.end(),cmp1);
+		n=0;
+		for(int i=1;i*i<=N;++i){
+			if(N%i==0&&i>n){
+				n=i;
+			}
+		}
+		m=N/n;		
+		int i=0,j=0;
+		int n1=0;
+		int m1=0;
+		int n2=n;
+		int m2=m;
+		int index=0;
+		while(index<N){
+			for(;j<n2;++j){
+				matrix[i][j]=vec[index++];
+				if(index==N)
+				{
+					break;
+				}
+			}
+			if(index==N)
+			{
+					break;
+			}
+			--n2;
+			++i;
+			--j;
+			for(;i<m2;++i){
+				matrix[i][j]=vec[index++];
+				if(index==N)
+				{
+						break;
+				}
+			}
+			if(index==N)
+			{
+					break;
+			}
+			--m2;
+			--i;
+			--j;
+			for(;j>=n1;--j){
+				matrix[i][j]=vec[index++];
+				if(index==N)
+				{
+						break;
+				}
+			}
+			if(index==N)
+			{
+					break;
+			}
+			++n1;
+			--i;
+			++j;
+			for(;i>m1;--i){
+				matrix[i][j]=vec[index++];
+				if(index==N)
+				{
+					break;
+				}
+			}
+			++m1;
+			++i;
+			++j;
+		}
+	
+	for(int a=0;a<m;++a){
+			for(int b=0;b<n;++b){
+				if(b!=n-1){
+					printf("%d ",matrix[a][b]);
+				}else{
+					printf("%d",matrix[a][b]);
+				}
+				
+			}
+			printf("\n");
+	}
+	return 0;
+}
+```
+
+# 1100. Mars Numbers (20)
+
+​    时间限制  
+
+​    400 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CHEN, Yue
+
+People on Mars count their numbers with base 13:
+
+-  Zero on Earth is called "tret" on Mars.
+-  The numbers 1 to 12 on Earch is called "jan, feb, mar, apr, may, jun, jly, aug, sep, oct, nov, dec" on Mars, respectively.
+-  For the next higher digit, Mars people name the 12 numbers as "tam, hel, maa, huh, tou, kes, hei, elo, syy, lok, mer, jou", respectively.
+
+For examples, the number 29 on Earth is called "hel mar" on Mars; and "elo nov" on Mars corresponds to 115 on Earth.  In order to help communication between people from these two planets, you are supposed to write a program for mutual translation between Earth and Mars number systems. 
+
+**Input Specification:**
+
+Each input file contains one test case.  For each case, the first line contains a positive integer N (< 100).  Then N lines follow, each contains a number in [0, 169), given either in the form of an Earth number, or that of Mars.
+
+**Output Specification:**
+
+For each number, print in a line the corresponding number in the other language.
+
+Sample Input:
+
+```
+4
+29
+5
+elo nov
+tam
+
+```
+
+Sample Output:
+
+```
+hel mar
+may
+115
+13
+```
+
+代码
+
+```c++
+#include<iostream>
+#include<string>
+#include<vector>
+#include<sstream>
+using namespace std;
+
+string low[13]={"tret","jan", "feb", "mar", "apr", "may", "jun", "jly", "aug", "sep", "oct", "nov", "dec"};
+string high[13]={" ","tam", "hel", "maa", "huh", "tou", "kes", "hei", "elo", "syy", "lok", "mer", "jou"};
+
+void todigitlow(string s){
+	
+	if(s.size()==3){
+		for(int i=0;i<13;++i){
+			if(s==low[i]){
+				cout<<i<<endl;
+				return;
+			}else if(s==high[i]){
+				cout<<i*13<<endl;
+				return;
+			}
+		}
+	}else{
+		string s1=s.substr(0,3);
+		
+		string s2=s.substr(4,3);
+	
+		int sum=0;
+		for(int i=0;i<13;++i){
+			if(s1==high[i]){
+				sum+=i*13;
+				
+			}
+			if(s2==low[i]){
+				sum+=i;			
+			}
+		}
+		cout<<sum<<endl;
+		return;
+	}
+}
+
+
+
+string  tolowmars(int value){
+	
+	switch(value){
+	case 0:
+		return "tret";
+	case 1:
+		return "jan";
+	case 2:
+		return "feb";
+	case 3:
+		return "mar";
+	case 4:
+		return "apr";
+	case 5:
+		return "may";
+	case 6:
+		return "jun";
+	case 7:
+		return "jly";
+	case 8:
+		return "aug";
+	case 9:
+		return "sep";
+	case 10:
+		return "oct";
+	case 11:
+		return "nov";
+	case 12:
+		return "dec";
+	}
+}
+string  tohighmars(int value){
+	switch(value){
+	case 1:
+		return "tam";
+	case 2:
+		return "hel";
+	case 3:
+		return "maa";
+	case 4:
+		return "huh";
+	case 5:
+		return "tou";
+	case 6:
+		return "kes";
+	case 7:
+		return "hei";
+	case 8:
+		return "elo";
+	case 9:
+		return "syy";
+	case 10:
+		return "lok";
+	case 11:
+		return "mer";
+	case 12:
+		return "jou";
+	default :
+		return "tret";
+	}
+}
+int main(){
+	int n;
+	cin>>n;
+	getchar();  //避免getline
+	string s;
+	for(int i=0;i<n;++i){
+		getline(cin,s);   
+		if(isdigit(s[0])){
+			vector<string> vec;
+			stringstream ss;
+			int value;
+			ss<<s;
+			ss>>value;
+			if(value%13!=0){
+				vec.push_back(tolowmars(value%13));
+			}else{
+				cout<<tohighmars(value/13)<<endl;
+				continue;
+			}
+			
+			while(value/13){
+				value/=13;
+			//	cout<<tohighmars(value%13)<<" "<<value<<endl;
+				vec.push_back(tohighmars(value%13));		
+			}
+			for(int j=vec.size()-1;j>=0;--j){
+				if(j!=0){
+					cout<<vec[j]<<" ";
+				}else{
+					cout<<vec[j]<<endl;
+				}
+			}
+		}else{
+			todigitlow(s);
+		}
+		
+	}
+	return 0;
+}
+```

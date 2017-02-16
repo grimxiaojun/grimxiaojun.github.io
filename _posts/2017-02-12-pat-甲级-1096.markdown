@@ -1,0 +1,93 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1096!"
+
+---
+# 1096. Consecutive Factors (20)
+
+​    时间限制  
+
+​    400 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CHEN, Yue
+
+Among all the factors of a positive integer N, there may exist several consecutive numbers.  For example, 630 can be factored as 3*5*6*7, where 5, 6, and 7 are the three consecutive numbers.  Now given any positive N, you are supposed to find the maximum number of consecutive factors, and list the smallest sequence of the consecutive factors.
+
+**Input Specification:**
+
+Each input file contains one test case, which gives the integer N (1<N<231).
+
+**Output Specification:**
+
+For each test case, print in the first line the maximum number of consecutive factors.  Then in the second line, print the smallest sequence of the consecutive factors in the format "factor[1]*factor[2]*...*factor[k]", where the factors are listed in increasing order, and 1 is NOT included.
+
+Sample Input:
+
+```
+630
+
+```
+
+Sample Output:
+
+```
+3
+5*6*7
+```
+
+注意点，开始点不会超过sqrt(n);确定开始点，依次往后走即可
+
+代码如下：
+
+```c++
+#include<iostream>
+#include<cmath>
+using namespace std;
+int main(){
+	long long n;
+	scanf("%lld",&n);
+	long long m=sqrt((double)n);
+	long long start=n;
+	long long maxcnt=0;
+	for(long long i=2;i<=m;++i){
+		int index=i;
+		int n1=n;
+		int cnt=0;
+		while(n1%index==0){
+			++cnt;
+			n1=n1/index;
+			++index;		
+		}
+		if(maxcnt<cnt){
+			maxcnt=cnt;
+			start=i;
+		}
+	}
+	if(maxcnt==0){
+		printf("1\n%lld",n);
+		return 0;
+	}
+	printf("%lld\n%lld",maxcnt,start);
+	for(int i=1;i<maxcnt;++i){
+		printf("*%lld",start+i);
+	}
+	return 0;
+}
+```
+
+参考了[zju](http://blog.csdn.net/tuzigg123/article/details/47175673)与[柳婼](http://www.liuchuo.net/archives/2110)的文章
+

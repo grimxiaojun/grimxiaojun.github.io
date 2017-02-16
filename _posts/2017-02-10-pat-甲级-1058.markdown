@@ -1,0 +1,132 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1058!"
+
+---
+# 1058. A+B in Hogwarts (20)
+
+​    时间限制  
+
+​    50 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CHEN, Yue
+
+If you are a fan of Harry Potter, you would know the world of magic has its own currency system -- as Hagrid explained it to Harry, "Seventeen silver Sickles to a Galleon and twenty-nine Knuts to a Sickle, it's easy enough."  Your job is to write a program to compute A+B where A and B are given in the standard form of "Galleon.Sickle.Knut" (Galleon is an integer in [0, 107], Sickle is an integer in [0, 17), and Knut is an integer in [0, 29)).
+
+**Input Specification:**
+
+Each input file contains one test case which occupies a line with A and B in the standard form, separated by one space. 
+
+**Output Specification:**
+
+For each test case you should output the sum of A and B in one line, with the same format as the input.
+
+Sample Input:
+
+```
+3.2.1 10.16.27
+
+```
+
+Sample Output:
+
+```
+14.1.28
+```
+
+分别相加进位
+
+利用了stringstream
+
+代码如下很low
+
+```c++
+#include<iostream>
+#include<string>
+#include<sstream>
+using namespace std;
+
+long change(string s){
+	stringstream ss;
+	long value;
+	ss<<s;
+	ss>>value;
+	return value;
+}
+
+int main(){
+	string a,b;
+	cin>>a>>b;
+	int index=a.find(".");
+	string a1=a.substr(0,index);
+	a.erase(0,index+1);
+	index=a.find(".");
+	string a2=a.substr(0,index);
+	a.erase(0,index+1);
+	string a3=a;
+
+	index=b.find(".");
+	string b1=b.substr(0,index);
+	b.erase(0,index+1);
+	index=b.find(".");
+	string b2=b.substr(0,index);
+	b.erase(0,index+1);
+	string b3=b;
+
+	long a11,a21,a31,b11,b21,b31,s1=0,s2=0,s3=0;
+	a11=change(a1);
+	a21=change(a2);
+	a31=change(a3);
+	b11=change(b1);
+	b21=change(b2);
+	b31=change(b3);
+	if((a31+b31)>=29){
+		s3=a31+b31-29;
+		s2++;
+	}else{
+		s3=a31+b31;
+	}
+	if((a21+b21+s2)>=17){
+		s2=s2+a21+b21-17;
+		s1++;
+	}else{
+		s2+=a21+b21;
+	}
+
+	s1=s1+a11+b11;
+	cout<<s1<<"."<<s2<<"."<<s3<<endl;
+
+	return 0;
+}
+```
+流弊代码如下[原文地址](http://www.liuchuo.net/archives/2059)
+
+完美利用了进制转换
+
+```c++
+#include<iostream>
+using namespace std;
+int main(){
+long long a,b,c,e,f,g;
+scanf("%lld.%lld.%lld %lld.%lld.%lld",&a,&b,&c,&e,&f,&g);
+long long sum=a*29*17+b*29+c+e*29*17+f*29+g;
+long long first=sum/(29*17);
+sum=sum%(29*17);
+printf("%lld.%lld.%lld",first,sum/29,sum%29);
+return 0;
+}
+```

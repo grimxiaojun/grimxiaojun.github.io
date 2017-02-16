@@ -1,0 +1,167 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1066!"
+
+---
+# 1066. Root of AVL Tree (25)
+
+​    时间限制  
+
+​    100 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CHEN, Yue
+
+An AVL tree is a self-balancing binary search tree.  In an AVL tree, the heights of the two child subtrees of any node differ by at most one; if at any time they differ by more than one, rebalancing is done to restore this property.  Figures 1-4 illustrate the rotation rules.
+
+![img](https://www.patest.cn/upload/79_mtxjq1kj3gx.jpg)    ![img](https://www.patest.cn/upload/79_mtxjqnwja2o.jpg)
+
+![img](https://www.patest.cn/upload/79_mtxjr4gyzdg.jpg)    ![img](https://www.patest.cn/upload/79_mtxjrh51o9y.jpg)
+
+Now given a sequence of insertions, you are supposed to tell the root of the resulting AVL tree.
+
+**Input Specification:**
+
+Each input file contains one test case.  For each case, the first line contains a positive integer N (<=20) which is the total number of keys to be inserted.  Then N distinct integer keys are given in the next line.  All the numbers in a line are separated by a space.
+
+**Output Specification:**
+
+For each test case, print ythe root of the resulting AVL tree in one line.
+
+Sample Input 1:
+
+```
+5
+88 70 61 96 120
+
+```
+
+Sample Output 1:
+
+```
+70
+
+```
+
+Sample Input 2:
+
+```
+7
+88 70 61 96 120 90 65
+
+```
+
+Sample Output 2:
+
+```
+88
+```
+
+代码如下：
+
+```c++
+#include<iostream>
+#include<vector>
+#include<algorithm>
+
+using namespace std;
+int n,index=0;
+
+
+struct Node{
+	int key;
+	struct Node*left;
+	struct Node*right;
+};
+
+int getHeight(struct Node *tree){
+	if(tree==NULL){
+		return 0;
+	}
+	int l=getHeight(tree->left);
+	int r=getHeight(tree->right);
+	return l>r?l+1:r+1;
+}
+
+struct Node *leftRotate(struct Node*tree){
+	struct Node*temp=tree->right;
+	tree->right=temp->left;
+	temp->left=tree;
+	return temp;
+}
+
+struct Node *rightRotate(struct Node *tree){
+	struct Node*temp=tree->left;
+	tree->left=temp->right;
+	temp->right=tree;
+	return temp;
+}
+struct Node*leftRightRotate(struct Node*tree){
+	tree->left=leftRotate(tree->left);
+	tree=rightRotate(tree);
+	return tree;
+}
+struct Node*rightLeftRotate(struct Node*tree){
+	tree->right=rightRotate(tree->right);
+	tree=leftRotate(tree);
+	return tree;
+}
+struct Node* insert(struct Node*tree,int val){
+	if(tree==NULL){
+		tree=new struct Node();
+		tree->key=val;
+		return tree;
+	}
+	if(val<tree->key){
+		tree->left=insert(tree->left,val);
+		int l=getHeight(tree->left);
+		int r=getHeight(tree->right);
+		if(l-r>=2){
+			if(val<tree->left->key){
+				tree=rightRotate(tree);
+			}else{
+				tree=leftRightRotate(tree);
+			}
+		}
+	}else{
+		tree->right=insert(tree->right,val);
+		int l=getHeight(tree->left);
+		int r=getHeight(tree->right);
+		if(r-l>=2){
+			if(val>tree->right->key){
+				tree=leftRotate(tree);
+			}else{
+				tree=rightLeftRotate(tree);
+			}
+		}
+	}
+	return tree;
+}
+
+
+int main(){
+	scanf("%d",&n);
+	int value;
+	struct Node *tree=NULL;
+	for(int i=0;i<n;++i){
+		scanf("%d",&value);
+		tree=insert(tree,value);
+	}	
+	printf("%d",tree->key);
+	return 0;
+}
+```
+
