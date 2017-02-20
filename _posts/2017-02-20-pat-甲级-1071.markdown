@@ -1,0 +1,97 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1071!"
+
+---
+# 1071. Speech Patterns (25)
+
+​    时间限制  
+
+​    300 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      HOU, Qiming
+
+People often have a preference among synonyms of the same word. For example, some may prefer "the police", while others may prefer "the cops". Analyzing such patterns can help to narrow down a speaker's identity, which is useful when validating, for example, whether it's still the same person behind an online avatar.
+
+Now given a paragraph of text sampled from someone's speech, can you find the person's most commonly used word?
+
+**Input Specification:**
+
+Each input file contains one test case. For each case, there is one line of text no more than 1048576 characters in length, terminated by a carriage return '\n'. The input contains at least one alphanumerical character, i.e., one character from the set [0-9 A-Z a-z].
+
+**Output Specification:**
+
+For each test case, print in one line the most commonly occurring word in the input text, followed by a space and the number of times it has occurred in the input. If there are more than one such words, print the lexicographically smallest one. The word should be printed in all lower case. Here a "word" is defined as a continuous sequence of alphanumerical characters separated by non-alphanumerical characters or the line beginning/end.
+
+Note that words are case **insensitive**. 
+
+Sample Input:
+
+```
+Can1: "Can a can can a can?  It can!"
+
+```
+
+Sample Output:
+
+```
+can 5
+```
+
+利用map映射，主要点利用isalnum判断单词开始与结束
+
+代码如下：
+
+```c++
+#include<iostream>
+#include<string>
+#include<map>
+using namespace std;
+int main(){
+	string s;
+	getline(cin,s);
+	map<string,int> m;
+	string temp="";
+	for(int i=0;i<s.size();++i){
+		if(isalnum(s[i])){
+			s[i]=tolower(s[i]);
+			temp+=s[i];
+		}else{
+			if(temp.size()){
+				m[temp]++;
+			}
+			temp="";
+		}
+	}
+	if(temp.size()){
+		m[temp]++;
+	}
+	int max;string s1;
+	for(auto i=m.begin();i!=m.end();++i){
+		if(i==m.begin()){
+			max=i->second;
+			s1=i->first;
+		}else if(max<i->second){
+			max=i->second;
+			s1=i->first;
+		}
+	}
+	cout<<s1<<" "<<max;
+	return 0;
+}
+```
+
