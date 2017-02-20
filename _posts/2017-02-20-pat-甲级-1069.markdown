@@ -1,0 +1,157 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1069!"
+
+---
+# 1069. The Black Hole of Numbers (20)
+
+​    时间限制  
+
+​    100 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CHEN, Yue
+
+For any 4-digit integer except the ones with all the digits being the same, if we sort the digits in non-increasing order first, and then in non-decreasing order, a new number can be obtained by taking the second number from the first one.  Repeat in this manner we will soon end up at the number 6174 -- the "black hole" of 4-digit numbers.  This number is named Kaprekar Constant.
+
+For example, start from 6767, we'll get:
+
+7766 - 6677 = 1089
+9810 - 0189 = 9621
+9621 - 1269 = 8352
+8532 - 2358 = 6174
+7641 - 1467 = 6174
+... ...
+
+Given any 4-digit number, you are supposed to illustrate the way it gets into the black hole.
+
+**Input Specification:**
+
+Each input file contains one test case which gives a positive integer N in the range (0, 10000).
+
+**Output Specification:**
+
+If all the 4 digits of N are the same, print in one line the equation "N - N = 0000".  Else print each step of calculation in a line until 6174 comes out as the difference.  All the numbers must be printed as 4-digit numbers.
+
+Sample Input 1:
+
+```
+6767
+
+```
+
+Sample Output 1:
+
+```
+7766 - 6677 = 1089
+9810 - 0189 = 9621
+9621 - 1269 = 8352
+8532 - 2358 = 6174
+
+```
+
+Sample Input 2:
+
+```
+2222
+
+```
+
+Sample Output 2:
+
+```
+2222 - 2222 = 0000
+```
+
+由于要排列数字，所以利用了数组存储每一位数字，利用了两个函数直接返回A,B值，利用一个函数看最后是否为6174若是则输出后结束，若不是则需要重新给数组赋值
+
+代码如下：
+
+```c++
+#include<iostream>
+#include<string>
+#include<algorithm>
+#include<sstream>
+
+using namespace std;
+int  a[4];
+int return_b_value(){
+	int A=0;
+	for(int i=0;i<4;++i){
+		int index=a[i];
+		A=A*10+index;
+	}
+	return A;
+}
+int return_a_value(){
+	int A=0;
+	for(int i=3;i>=0;--i){
+		int index=a[i];
+		A=A*10+index;
+	}
+	return A;
+}
+
+int final_value(int A,int B){
+	if(A-B==6174){
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
+void change_a(int value){
+	
+	for(int i=3;i>=0;--i){
+		a[i]=value%10;
+		value/=10;
+	}
+}
+
+int cmp1(int c,int d){
+	return c<d;
+}
+int main(){	
+	int n;
+	scanf("%d",&n);
+	change_a(n);
+	int flag=0;
+	for(int i=1;i<4;++i){
+		if(a[0]!=a[i]){
+			flag=1;break;
+		}
+	}
+	if(flag==0){
+		printf("%04d - %04d = 0000",n,n);
+		return 0;
+	}
+	while(1){
+		sort(a,a+4,cmp1);
+		int A,B;
+		A=return_a_value();
+		B=return_b_value();
+		if(final_value(A,B)){
+			printf("%04d - %04d = %04d",A,B,A-B);
+			break;
+		}else{
+			printf("%04d - %04d = %04d\n",A,B,A-B);
+			change_a(A-B);
+		}
+	}
+	return 0;
+}
+```
+
