@@ -1,0 +1,160 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1089!"
+
+---
+# 1089. Insert or Merge (25)
+
+​    时间限制  
+
+​    200 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CHEN, Yue
+
+According to Wikipedia:
+
+**Insertion sort** iterates, consuming one input element each repetition, and growing a sorted output list. Each iteration, insertion sort removes one element from the input data, finds the location it belongs within the sorted list, and inserts it there. It repeats until no input elements remain.
+
+**Merge sort** works as follows: Divide the unsorted list into N sublists, each containing 1 element (a list of 1 element is considered sorted).  Then repeatedly merge two adjacent sublists to produce new sorted sublists until there is only 1 sublist remaining.
+
+Now given the initial sequence of integers, together with a sequence which is a result of several iterations of some sorting method, can you tell which sorting method we are using?
+
+**Input Specification:**
+
+Each input file contains one test case.  For each case, the first line gives a positive integer N (<=100).  Then in the next line, N integers are given as the initial sequence.  The last line contains the partially sorted sequence of the N numbers.  It is assumed that the target sequence is always ascending.  All the numbers in a line are separated by a space.
+
+**Output Specification:**
+
+For each test case, print in the first line either "Insertion Sort" or "Merge Sort" to indicate the method used to obtain the partial result.  Then run this method for one more iteration and output in the second line the resulting sequence.  It is guaranteed that the answer is unique for each test case.  All the numbers in a line must be separated by a space, and there must be no extra space at the end of the line.
+
+Sample Input 1:
+
+```
+10
+3 1 2 8 7 5 9 4 6 0
+1 2 3 7 8 5 9 4 6 0
+
+```
+
+Sample Output 1:
+
+```
+Insertion Sort
+1 2 3 5 7 8 9 4 6 0
+
+```
+
+Sample Input 2:
+
+```
+10
+3 1 2 8 7 5 9 4 0 6
+1 3 2 8 5 7 4 9 0 6
+
+```
+
+Sample Output 2:
+
+```
+Merge Sort
+1 2 3 8 4 5 7 9 0 6
+```
+
+代码如下：
+
+```c++
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+int n;
+int origin[101],after[101];
+
+int  mergeSort(){
+	int i,j;
+	for(i=1;i<n;i=2*i){
+		for(j=0;j+i<n;j=j+i){
+			sort(origin+j,origin+j+i);
+			int flag=0;
+			for(int q=0;q<n;++q){
+				
+				if(origin[q]!=after[q]){			
+					flag=1;
+					break;
+				}
+			}
+			if(flag==0){
+				return i;
+			}
+		}
+		if(j!=n)sort(origin+j,origin+n);
+		
+		int flag1=0;
+			for(int q=0;q<n;++q){
+				if(origin[q]!=after[q]){			
+					flag1=1;
+					break;
+				}
+			}
+			if(flag1==0){
+				return i;
+			}
+	}
+	return n;
+}
+
+
+int main(){
+	scanf("%d",&n);
+	
+	for(int i=0;i<n;++i){
+		scanf("%d",&origin[i]);
+	}
+	for(int i=0;i<n;++i){
+		scanf("%d",&after[i]);
+	}
+	int index=1;
+	while(index<n&&after[index-1]<=after[index])++index;
+	int index1=index;
+	while(index<n&&origin[index]==after[index]) ++index;
+	
+	
+	if(index==n){
+		printf("Insertion Sort\n");
+		if(index1!=n)sort(after,after+index1+1);
+		else{sort(after,after+n);}
+		printf("%d",after[0]);
+		for(int i=1;i<n;++i){
+			printf(" %d",after[i]);
+		}
+	}else{
+		printf("Merge Sort\n");
+		int i=mergeSort()*2;
+		int j;
+		for(j=0;j+i<n;j=j+i){		
+			sort(origin+j,origin+j+i);
+		}	
+		if(j!=n)sort(origin+j,origin+n);
+		printf("%d",origin[0]);
+		for(i=1;i<n;++i){
+			printf(" %d",origin[i]);
+		}
+	}
+	return 0;
+}
+```
+

@@ -1,0 +1,149 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1091!"
+
+---
+# 1091. Acute Stroke (30)
+
+​    时间限制  
+
+​    400 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CHEN, Yue
+
+One important factor to identify acute stroke (急性脑卒中) is the volume of the stroke core.  Given the results of image analysis in which the core regions are identified in each MRI slice, your job is to calculate the volume of the stroke core.
+
+**Input Specification:**
+
+Each input file contains one test case.  For each case, the first line contains 4 positive integers: M, N, L and T, where M and N are the sizes of each slice (i.e. pixels of a slice are in an M by N matrix, and the maximum resolution is 1286 by 128); L (<=60) is the number of slices of a brain; and T is the integer threshold (i.e. if the volume of a connected core is less than T, then that core must not be counted).
+
+Then L slices are given.  Each slice is represented by an M by N matrix of 0's and 1's, where 1 represents a pixel of stroke, and 0 means normal.  Since the thickness of a slice is a constant, we only have to count the number of 1's to obtain the volume.  However, there might be several separated core regions in a brain, and only those with their volumes no less than T are counted. Two pixels are "connected" and hence belong to the same region if they share a common side, as shown by Figure 1 where all the 6 red pixels are connected to the blue one.
+
+![img](https://www.patest.cn/upload/g0_nf8qpnrr0f1.jpg)
+Figure 1
+
+**Output Specification:**
+
+For each case, output in a line the total volume of the stroke core.
+
+Sample Input:
+
+```
+3 4 5 2
+1 1 1 1
+1 1 1 1
+1 1 1 1
+0 0 1 1
+0 0 1 1
+0 0 1 1
+1 0 1 1
+0 1 0 0
+0 0 0 0
+1 0 1 1
+0 0 0 0
+0 0 0 0
+0 0 0 1
+0 0 0 1
+1 0 0 0
+
+```
+
+Sample Output:
+
+```
+26
+```
+
+这道题我几乎是没有弄懂的。。。。根本就没往三维的方向去想，下面的代码参考了两个人的。。虽然他们的代码几乎一模一样。。。。
+
+代码如下：[参考地址](http://www.liuchuo.net/archives/2307) 和 [参考地址](http://blog.csdn.net/sinat_29278271/article/details/47768209) 
+
+```c++
+#include<iostream>
+#include<queue>
+using namespace std;
+
+int m,n,l,t;
+int map[65][1300][130];
+bool visited[65][1300][130];
+
+int X[6]={1,-1,0,0,0,0};
+int Y[6]={0,0,1,-1,0,0};
+int Z[6]={0,0,0,0,1,-1};
+
+
+
+struct Node{
+	int x,y,z;
+};
+
+bool judge(int x,int y,int z){
+	if(x<0||x>=l||y<0||y>=m||z<0||z>=n)return false;
+	if(map[x][y][z]==0||visited[x][y][z]==true) return false;
+	return true;
+}
+
+int bfs(int x,int y,int z){
+	int cnt=0;
+	Node temp;
+	temp.x=x;temp.y=y;temp.z=z;
+	queue<Node>q;
+	q.push(temp);
+	visited[x][y][z]=true;
+	while(!q.empty()){
+		Node top=q.front();
+		q.pop();
+		++cnt;
+		for(int i=0;i<6;++i){
+			int tx=top.x+X[i];
+			int ty=top.y+Y[i];
+			int tz=top.z+Z[i];
+			if(judge(tx,ty,tz)){
+				visited[tx][ty][tz]=true;
+				temp.x=tx;temp.y=ty;temp.z=tz;
+				q.push(temp);
+			}
+		}
+	}
+	if(cnt>=t) return cnt;
+	else return 0;
+}
+
+int main(){
+	int ans=0;
+	scanf("%d%d%d%d",&m,&n,&l,&t);
+	for(int i=0;i<l;++i){
+		for(int j=0;j<m;++j){
+			for(int k=0;k<n;++k){
+				scanf("%d",&map[i][j][k]);
+			}
+		}
+	}
+	for(int i=0;i<l;++i){
+		for(int j=0;j<m;++j){
+			for(int k=0;k<n;++k){
+				if(map[i][j][k]&&visited[i][j][k]==false){
+					ans+=bfs(i,j,k);
+				}
+			}
+		}
+	}
+	printf("%d",ans);
+	return 0;
+}
+```
+

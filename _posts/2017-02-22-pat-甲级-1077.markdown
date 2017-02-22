@@ -1,0 +1,124 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1077!"
+
+---
+# 1077. Kuchiguse (20)
+
+​    时间限制  
+
+​    100 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      HOU, Qiming
+
+The Japanese language is notorious for its sentence ending particles. Personal preference of such particles can be considered as a reflection of the speaker's personality. Such a preference is called "Kuchiguse" and is often exaggerated artistically in Anime and Manga. For example, the artificial sentence ending particle "nyan~" is often used as a stereotype for characters with a cat-like personality:
+
+Itai nyan~ (It hurts, nyan~)
+
+Ninjin wa iyada nyan~ (I hate carrots, nyan~)
+
+Now given a few lines spoken by the same character, can you find her Kuchiguse?
+
+**Input Specification:**
+
+Each input file contains one test case.  For each case, the first line is an integer N (2<=N<=100). Following are N file lines of 0~256 (inclusive) characters in length, each representing a character's spoken line. The spoken lines are case sensitive.
+
+**Output Specification:**
+
+For each test case, print in one line the kuchiguse of the character, i.e., the longest common suffix of all N lines. If there is no such suffix, write "nai".
+
+Sample Input 1:
+
+```
+3
+Itai nyan~
+Ninjin wa iyadanyan~
+uhhh nyan~
+
+```
+
+Sample Output 1:
+
+```
+nyan~
+
+```
+
+Sample Input 2:
+
+```
+3
+Itai!
+Ninjinnwaiyada T_T
+T_T
+
+```
+
+Sample Output 2:
+
+```
+nai
+```
+
+后缀相同的输出，无则输出nai
+
+代码如下：
+
+```c++
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+
+int main(){
+	int n;
+	scanf("%d",&n);
+	getchar();
+	string s;
+	string ans;
+	for(int i=0;i<n;++i){
+		getline(cin,s);
+		if(i==0){
+			ans=s;
+		}else{
+			int index=ans.size();
+			if(index==0){
+				printf("nai");
+				return 0;
+			}
+			
+			for(int j=s.size()-1;j>=0;--j){
+				if(index<=0)break;
+				
+				if(ans[--index]!=s[j]){
+					ans=s.substr(j+1,s.size()-j);
+					break;
+				}
+			}
+			
+		}
+	}
+	if(ans.size()==0){
+		printf("nai");
+	}else{
+		cout<<ans;
+	}
+	return 0;
+}
+```
+
