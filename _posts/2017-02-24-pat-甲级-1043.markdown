@@ -1,0 +1,200 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1084!"
+
+---
+# 1043. Is It a Binary Search Tree (25)
+
+​    时间限制  
+
+​    400 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CHEN, Yue
+
+A Binary Search Tree (BST) is recursively defined as a binary tree which has the following properties:
+
+- The left subtree of a node contains only nodes with keys less than the node's key. 
+- The right subtree of a node contains only nodes with keys greater than or equal to the node's key. 
+- Both the left and right subtrees must also be binary search trees. 
+
+If we swap the left and right subtrees of every node, then the resulting tree is called the Mirror Image of a BST.
+
+Now given a sequence of integer keys, you are supposed to tell if it is the preorder traversal sequence of a BST or the mirror image of a BST.
+
+**Input Specification:**
+
+Each input file contains one test case.  For each case, the first line contains a positive integer N (<=1000).  Then N integer keys are given in the next line.  All the numbers in a line are separated by a space.
+
+**Output Specification:**
+
+For each test case, first print in a line "YES" if the sequence is the preorder traversal sequence of a BST or the mirror image of a BST, or "NO" if not.  Then if the answer is "YES", print in the next line the postorder traversal sequence of that tree.  All the numbers in a line must be separated by a space, and there must be no extra space at the end of the line.
+
+Sample Input 1:
+
+```
+7
+8 6 5 7 10 8 11
+
+```
+
+Sample Output 1:
+
+```
+YES
+5 7 6 8 11 10 8
+
+```
+
+Sample Input 2:
+
+```
+7
+8 10 11 8 6 7 5
+
+```
+
+Sample Output 2:
+
+```
+YES
+11 8 10 7 5 6 8
+
+```
+
+Sample Input 3:
+
+```
+7
+8 6 8 5 10 9 11
+
+```
+
+Sample Output 3:
+
+```
+NO
+```
+
+先利用递归判断是否为二叉树或镜像树，根据判断来确定中序，然后便是先序中序转后序
+
+注意点（右子树的根节点root+ i-start+1）;
+
+若为后序中序得先序（左子树的根节点root-(end-i+1) ）
+
+代码如下：
+
+```c++
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+vector<int> pre,in,post;
+int n;
+
+void printf1_post(int root,int start,int end){
+	if(start>end) return;
+	int i=start;
+	while(i<end&&pre[root]!=in[i])++i;
+	printf1_post(root+1,start,i-1);
+	printf1_post(root+i-start+1,i+1,end);
+	post.push_back(pre[root]);
+}
+void printf2_post(int root,int start,int end){
+	if(start>end) return;
+	int i=end;
+	while(pre[root]!=in[i])--i;
+	printf2_post(root+1,start,i-1);
+	printf2_post(root+i-start+1,i+1,end);
+	post.push_back(pre[root]);
+}
+int judge_bst(int root,int start,int end){
+	if(start>=end)return 1;
+	int index=start;
+	while(index<end&&pre[root]>pre[index]) index++;
+	int i=index;
+	while(index<end&&pre[root]<=pre[index]) index++;
+	if(index==end) {
+		int flag=judge_bst(root+1,root+2,i);
+		if(flag==1){
+			flag=0;
+			flag=judge_bst(i,i+1,end);
+			if(flag==1)return true;
+			else return false;
+		}else return false;
+	}else{
+		return 0;
+	}
+	
+}
+int judge_mirror_bst(int root,int start,int end){
+	if(start>=end)return 1;
+	int index=start;
+	while(index<end&&pre[root]<=pre[index]) index++;
+	int i=index;
+	while(index<end&&pre[root]>pre[index]) index++;
+	if(index==end) {
+		int flag=judge_mirror_bst(root+1,root+2,i);
+		if(flag==1){
+			
+			flag=0;
+			flag=judge_mirror_bst(i,i+1,end);
+			if(flag==1)return true;
+			else return false;
+		}else return false;
+	}
+	else{return 0;}
+	
+}
+int cmp1(int a,int b){
+	return a>b;
+}
+int main(){
+	int val;
+	scanf("%d",&n);
+	for(int i=0;i<n;++i){
+		scanf("%d",&val);
+		pre.push_back(val);
+		in.push_back(val);
+	}
+	int flag=judge_bst(0,1,n);
+
+	if(flag==0){	
+		flag=judge_mirror_bst(0,1,n);	
+		if(flag==0){
+			printf("NO\n");
+			return 0;
+		}else{
+			sort(in.begin(),in.end(),cmp1);
+			printf2_post(0,0,n-1);
+		}
+	}else{
+		sort(in.begin(),in.end());
+		printf1_post(0,0,n-1);
+	}
+		printf("YES\n");
+		for(int i=0;i<post.size();++i){
+			if(i==0){
+				printf("%d",post[i]);
+			}else{
+				printf(" %d",post[i]);
+			}
+		}
+	
+	return 0;
+}
+```
+
