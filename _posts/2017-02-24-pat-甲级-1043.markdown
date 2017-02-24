@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Pat 甲级 训练真题集 1084!"
+title:  "Pat 甲级 训练真题集 1043!"
 
 ---
 # 1043. Is It a Binary Search Tree (25)
