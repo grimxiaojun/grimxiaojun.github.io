@@ -1,0 +1,87 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1049!"
+
+---
+# 1049. Counting Ones (30)
+
+​    时间限制  
+
+​    100 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CHEN, Yue
+
+The task is simple: given any positive integer N, you are supposed to count the total number of 1's in the decimal form of the integers from 1 to N.  For example, given N being 12, there are five 1's in 1, 10, 11, and 12.
+
+**Input Specification:**
+
+Each input file contains one test case which gives the positive N (<=230).
+
+**Output Specification:**
+
+For each test case, print the number of 1's in one line.
+
+Sample Input:
+
+```
+12
+
+```
+
+Sample Output:
+
+```
+5
+```
+
+这道题如果一个数一个数的加，必定会超时。。。
+
+然后我没想到更好的方法，下面代码的方法比较精妙，
+
+从个位到最高位，依次计算left(表示当前数的左边的部分)，right(当前数的右边的部分)  now(当前数)，a表示当前为什么位1，10，100，。。。
+
+就有当now==0,cnt+=left*a;这里的left值从0到left-1均有右面的a次
+
+now==1,cnt+=left*a+right+1,这里的left值从0到left-1均有右面的a次,又由于now==1,所以右边的0到right的每一个均要+1；
+
+now>=2后则cnt+=(left+1)*a,这里的left+1值从0到left均有右面的a次
+
+不得不说这样的分析很精妙
+
+代码如下：
+
+```c++
+#include<iostream>
+using namespace std;
+
+int main(){
+	int n,left,right,now,a=1,cnt=0;
+	scanf("%d",&n);
+	while(n/a){
+		left=n/(a*10);
+		now=n/a%10;
+		right=n%a;
+		if(now==0)cnt+=left*a;
+		else if(now==1)cnt+=left*a+right+1;
+		else cnt+=(left+1)*a;
+		a=a*10;
+	}
+	printf("%d",cnt);
+	return 0;
+}
+```
+

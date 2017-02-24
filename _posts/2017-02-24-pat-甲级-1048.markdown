@@ -1,0 +1,107 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1048!"
+
+---
+# 1048. Find Coins (25)
+
+​    时间限制  
+
+​    100 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CHEN, Yue
+
+Eva loves to collect coins from all over the universe, including some other planets like Mars.  One day she visited a universal shopping mall which could accept all kinds of coins as payments.  However, there was a special requirement of the payment: for each bill, she could only use exactly two coins to pay the exact amount.  Since she has as many as 105 coins with her, she definitely needs your help.  You are supposed to tell her, for any given amount of money, whether or not she can find two coins to pay for it.
+
+**Input Specification:**
+
+Each input file contains one test case.  For each case, the first line contains 2 positive numbers: N (<=105, the total number of coins) and M(<=103, the amount of money Eva has to pay).  The second line contains N face values of the coins, which are all positive numbers no more than 500.  All the numbers in a line are separated by a space.
+
+**Output Specification:**
+
+For each test case, print in one line the two face values V1 and V2 (separated by a space) such that V1 + V2 = M and V1 <= V2.  If such a solution is not unique, output the one with the smallest V1.  If there is no solution, output "No Solution" instead.
+
+Sample Input 1:
+
+```
+8 15
+1 2 8 7 2 4 11 15
+
+```
+
+Sample Output 1:
+
+```
+4 11
+
+```
+
+Sample Input 2:
+
+```
+7 14
+1 8 7 2 4 11 15
+
+```
+
+Sample Output 2:
+
+```
+No Solution
+```
+
+题意：准确的找出两个硬币用来付账，若没有输出No Solution;
+
+若有则输出两个硬币的值；
+
+这道题我一开始就想到了先排序，然后从第一个开始找，与最后的值相加，若是小于，则进行下一个，若是大于，给最后一个值定位，若是等于则输出；
+
+由于我觉得我只截枝了最后的一部分，以为肯定会有测试点不能过，没想到完全通过，让我惊讶了一番。。
+
+代码如下：
+
+```c++
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+int main(){
+	int n,sum;
+	scanf("%d%d",&n,&sum);
+	vector<int> v(n);
+	for(int i=0;i<n;++i){
+		scanf("%d",&v[i]);
+	}
+	sort(v.begin(),v.end());
+	int index=n;
+	for(int i=0;i<n-1;++i){
+		for(int j=index-1;j>i;--j){
+			if(v[i]+v[j]>sum)index=j;
+			else if(v[i]+v[j]==sum){
+				printf("%d %d",v[i],v[j]);
+				return 0;
+			}else{
+				break;
+			}
+		}
+	}
+	printf("No Solution");
+	return 0;
+}
+```
+
