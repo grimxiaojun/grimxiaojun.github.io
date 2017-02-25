@@ -1,0 +1,167 @@
+---
+layout: post
+title:  "Pat 甲级 训练真题集 1055!"
+
+---
+# 1055. The World's Richest (25)
+
+​    时间限制  
+
+​    400 ms
+
+​    内存限制  
+
+​    128000 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CHEN, Yue
+
+Forbes magazine publishes every year its list of billionaires based on the annual ranking of the world's wealthiest people.  Now you are supposed to simulate this job, but concentrate only on the people in a certain range of ages.  That is, given the net worths of N people, you must find the M richest people in a given range of their ages.
+
+**Input Specification:**
+
+Each input file contains one test case.  For each case, the first line contains 2 positive integers: N (<=105) - the total number of people, and K (<=103) - the number of queries.  Then N lines follow, each contains the name (string of no more than 8 characters without space), age (integer in (0, 200]), and the net worth (integer in [-106, 106]) of a person.  Finally there are K lines of queries, each contains three positive integers: M (<= 100) - the maximum number of outputs, and [Amin, Amax] which are the range of ages.  All the numbers in a line are separated by a space.
+
+**Output Specification:**
+
+For each query, first print in a line "Case #X:" where X is the query number starting from 1.  Then output the M richest people with their ages in the range [Amin, Amax].  Each person's information occupies a line, in the format
+
+```
+Name Age Net_Worth
+
+```
+
+Sample Input:
+
+```
+12 4
+Zoe_Bill 35 2333
+Bob_Volk 24 5888
+Anny_Cin 95 999999
+Williams 30 -22
+Cindy 76 76000
+Alice 18 88888
+Joe_Mike 32 3222
+Michael 5 300000
+Rosemary 40 5888
+Dobby 24 5888
+Billy 24 5888
+Nobody 5 0
+4 15 45
+4 30 35
+4 5 95
+1 45 50
+
+```
+
+Sample Output:
+
+```
+Case #1:
+Alice 18 88888
+Billy 24 5888
+Bob_Volk 24 5888
+Dobby 24 5888
+Case #2:
+Joe_Mike 32 3222
+Zoe_Bill 35 2333
+Williams 30 -22
+Case #3:
+Anny_Cin 95 999999
+Michael 5 300000
+Alice 18 88888
+Cindy 76 76000
+Case #4:
+None
+```
+
+最开始第二个测试点超时，因为量大了，我本来想用什么来确定年龄段，但是这样还是有点多。。然后再网上看到了一个我之前没注意到的题目信息就是查询的任务数量最多为100然后看到下列代码
+
+	
+	for(int i=0;i<n;++i){
+	  if(book[person[i].age]<100){
+	    ++book[person[i].age];
+	    t.push_back(person[i]);
+	  }
+	}
+便不超时,以上的不超时思路[参考地址](http://www.liuchuo.net/archives/2255)
+
+代码如下：
+
+```c++
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<cstring>
+using namespace std;
+
+struct Person{
+	char name[9];
+	int age;
+	int worth;
+}person[100010];
+
+int cmp1(Person p1,Person p2){
+	return p1.age<p2.age;
+}
+int cmp2(Person p1,Person p2){
+	if(p1.worth>p2.worth){
+		return 1;
+	}else if(p1.worth==p2.worth&&p1.age<p2.age){
+		return 1;
+	}else if(p1.worth==p2.worth&&p1.age==p2.age&&strcmp(p1.name,p2.name)<0){
+		return 1;
+	}else{
+		return 0;
+	}
+}
+vector<int> book(205,0);
+vector<Person> t;
+int main(){
+	int n,k;
+	scanf("%d%d",&n,&k);
+	for(int i=0;i<n;++i){
+		scanf("%s %d %d",&person[i].name,&person[i].age,&person[i].worth);
+	}
+	sort(person,person+n,cmp2);
+	for(int i=0;i<n;++i){
+		if(book[person[i].age]<100){
+			++book[person[i].age];
+			t.push_back(person[i]);
+		}
+	}
+	vector<Person> v;
+	for(int i=1;i<=k;++i){
+		int num,a1,a2;
+		scanf("%d %d %d",&num,&a1,&a2);
+		v.clear();
+		for(int j=0;j<t.size();++j){
+			
+			if(t[j].age>=a1&&t[j].age<=a2){
+				v.push_back(t[j]);
+			}
+		}
+		//sort(v.begin(),v.end(),cmp2);
+		printf("Case #%d:\n",i);
+		int flag=0;
+		for(int j=0;j<v.size()&&j<num;++j){
+			flag=1;
+			printf("%s %d %d\n",v[j].name,v[j].age,v[j].worth);
+		}
+		if(flag==0)printf("None\n");
+	}
+	return 0;
+}
+
+```
+
+
