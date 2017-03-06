@@ -1,0 +1,35 @@
+---
+layout: post
+title:  "牛客网 剑指offer 求1的个数"
+
+---
+时间限制：1秒空间限制：32768K热度指数：6940
+
+**算法知识视频讲解
+
+## 题目描述
+
+求出1~13的整数中1出现的次数,并算出100~1300的整数中1出现的次数？为此他特别数了一下1~13中包含1的数字有1、10、11、12、13因此共出现6次,但是对于后面问题他就没辙了。ACMer希望你们帮帮他,并把问题更加普遍化,可以很快的求出任意非负整数区间中1出现的次数。
+
+代码如下：
+
+```c++
+class Solution {
+public:
+    int NumberOf1Between1AndN_Solution(int n)
+    {
+    	int left,right,now,a=1,cnt=0;
+        while(n/a){
+            left=n/(a*10);
+            now=n/a%10;
+            right=n%a;
+            if(now==0)cnt+=left*a;
+            else if(now==1)cnt+=left*a+right+1;
+            else cnt+=a*(left+1);
+            a=a*10;
+        }
+        return cnt;
+    }
+};
+```
+

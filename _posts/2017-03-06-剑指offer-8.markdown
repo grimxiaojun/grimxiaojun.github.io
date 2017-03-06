@@ -1,0 +1,28 @@
+---
+layout: post
+title:  "牛客网 剑指offer 跳台阶"
+
+---
+时间限制：1秒空间限制：32768K热度指数：22143
+
+**算法知识视频讲解
+
+## 题目描述
+
+一只青蛙一次可以跳上1级台阶，也可以跳上2级。求该青蛙跳上一个n级的台阶总共有多少种跳法。
+
+代码如下：
+
+```c++
+class Solution {
+public:
+    int jumpFloor(int number) {
+        if(number==1)return 1;
+        if(number==2)return 2;
+        int cnt=jumpFloor(number-1);
+        int cnt1=jumpFloor(number-2);
+        return cnt+cnt1;
+    }
+};
+```
+
