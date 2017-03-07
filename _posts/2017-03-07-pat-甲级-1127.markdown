@@ -1,0 +1,138 @@
+---
+layout: post
+title:  "pat 甲级 1127"
+
+---
+# 1127. ZigZagging on a Tree (30)
+
+​    时间限制  
+
+​    400 ms
+
+​    内存限制  
+
+​    65536 kB
+
+​    代码长度限制  
+
+​    16000 B
+
+​      判题程序    
+
+​      Standard    
+
+​      作者    
+
+​      CHEN, Yue
+
+Suppose that all the keys in a binary tree are distinct positive integers.  A unique binary tree can be determined by a given pair of postorder and inorder traversal sequences.  And it is a simple standard routine to print the numbers in level-order.  However, if you think the problem is too simple, then you are too naive.  This time you are supposed to print the numbers in "zigzagging order" -- that is, starting from the root, print the numbers level-by-level, alternating between left to right and right to left.  For example, for the following tree you must output: 1 11 5 8 17 12 20 15.
+
+![img](https://www.patest.cn/upload/nc_ol5xekjcdy4.jpg)
+
+**Input Specification:**
+
+Each input file contains one test case.  For each case, the first line gives a positive integer N (<= 30), the total number of nodes in the binary tree.  The second line gives the inorder sequence and the third line gives the postorder sequence.  All the numbers in a line are separated by a space.
+
+**Output Specification:**
+
+For each test case, print the zigzagging sequence of the tree in a line.  All the numbers in a line must be separated by exactly one space, and there must be no extra space at the end of the line.
+
+Sample Input:
+
+```
+8
+12 11 20 17 1 15 8 5
+12 20 17 11 15 8 5 1
+
+```
+
+Sample Output:
+
+```
+1 11 5 8 17 12 20 15
+```
+
+此题为中序后序求层次遍历，
+
+然后以s形状输出层次遍历
+
+利用result存层次，depth存每一层次有多少点
+
+然后根据depth输出
+
+代码如下：
+
+```c++
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+
+struct Node{
+	int key;
+	int index;
+}node;
+int cmp1(Node a,Node b){
+	return a.index<b.index;
+}
+vector<int>in,post;
+vector<int>depth(50);
+vector<Node>result;
+void print_result(int root,int start,int end,int index,int deep){
+	if(start>end){
+		return;
+	}
+	int i=start;
+	for(;i<end;++i){
+		if(in[i]==post[root]){
+			break;
+		}
+	}
+	node.index=index;node.key=post[root];
+	result.push_back(node);
+	depth[deep]++;
+	
+	print_result(root-(end-i+1),start,i-1,2*index+1,deep+1);
+	print_result(root-1,i+1,end,2*index+2,deep+1);
+}
+
+int main(){
+	int n;
+	scanf("%d",&n);
+	post.resize(n);
+	in.resize(n);
+	for(int i=0;i<n;++i){
+		scanf("%d",&in[i]);
+	}
+	for(int i=0;i<n;++i){
+		scanf("%d",&post[i]);
+	}
+	print_result(n-1,0,n-1,0,0);
+	
+	sort(result.begin(),result.end(),cmp1);
+	
+	int index=1;
+	printf("%d",result[0].key);
+	for(int i=1;i<n;++i){
+		if(depth[i]>0){
+			int q=depth[i];
+			if(i%2!=0){
+				for(int j=index;j<q+index;++j){
+					printf(" %d",result[j].key);
+				}
+				index+=q;
+			}else{
+				for(int j=index+q-1;j>=index;--j){
+					printf(" %d",result[j].key);
+				}
+				index+=q;
+			}
+		}else{
+			break;
+		}
+	}
+	return 0;
+}
+```
+
