@@ -1,0 +1,56 @@
+---
+layout: post
+title:  "牛客网 腾讯在线编程题 1"
+
+---
+# 题目
+
+给定一个字符串s，你可以从中删除一些字符，使得剩下的串是一个回文串。如何删除才能使得回文串最长呢？
+
+ 输出需要删除的字符个数。
+
+
+
+我只想说有毒
+
+不是一个文件一个测试用例而是连续输入
+
+唯一的一点就是这特坑
+
+动态规划
+
+最长公共子序列
+
+代码如下：
+
+```c++
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int LongestStrHui(string &s){
+    string tmp = s; 
+    reverse(tmp.begin(), tmp.end());   
+    int len = s.size();     
+    vector<vector<int>> V(len + 1, vector<int>(len + 1, 0));   
+    for (int i = 0; i < len; ++i)    {  
+        for (int j = 0; j < len; ++j)   
+        {           if (s[i] == tmp[j])    
+                        V[i + 1][j + 1] = 1 + V[i][j];     
+                    else               
+                        V[i + 1][j + 1] = max(V[i][j + 1], V[i + 1][j]);       
+        }  
+    }   
+    //cout<<V[len][len]<<endl;
+    return len - V[len][len];
+}
+int main(){
+    string s;  
+    while (cin >> s)  {      
+        cout << LongestStrHui(s)<<endl;
+    }  
+    return 0;
+}
+```
+

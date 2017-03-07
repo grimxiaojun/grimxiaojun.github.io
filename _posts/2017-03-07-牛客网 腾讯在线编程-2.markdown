@@ -1,0 +1,56 @@
+---
+layout: post
+title:  "牛客网 腾讯在线编程题 2"
+
+---
+# 题目
+
+小Q最近遇到了一个难题：把一个字符串的大写字母放到字符串的后面，各个字符的相对位置不变，且不能申请额外的空间。
+
+ 你能帮帮小Q吗？ 
+
+
+
+
+
+我只想说有毒
+
+不是一个文件一个测试用例而是连续输入
+
+唯一的一点就是这特坑，浪费大量时间
+
+注意点：从后往前遍历，当前字符为大写时调到最后（利用cnt判断已经有多少个大写字母在后面），依次调整即可
+
+代码如下：
+
+```c++
+#include<iostream>
+#include<string>
+using namespace std;
+ 
+ 
+int main(){
+    string s;
+        while(cin>>s){
+             int cnt=0;
+            for(int i=s.size()-1;i>=0;--i){
+                if(isupper(s[i])){
+                    int j=i;
+                    ++cnt;
+                    char temp=s[i];
+                    while(j<s.size()-cnt){
+                        s[j]=s[j+1];
+                        ++j;
+                    }
+                    s[s.size()-cnt]=temp;
+                }
+            }
+            cout<<s<<endl;
+        }
+        
+     
+     
+    return 0;
+}
+```
+

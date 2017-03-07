@@ -1,0 +1,75 @@
+---
+layout: post
+title:  "牛客网 腾讯在线编程题 3"
+
+---
+# 题目
+
+小Q今天在上厕所时想到了这个问题：有n个数，两两组成二元组，差最小的有多少对呢？差最大呢？ 
+
+
+
+
+
+
+
+注意点：先从小到大进行排序，遍历一遍看有多少相同的数，若有相同数则min+=(n)*(n-1)/2,如果无相同数，则从小到大再次遍历即可获得
+
+最大的数为最小的数的个数*最大的数的个数（他们不相同），若相同则n\*(n-1)/2
+
+代码如下：
+
+```c++
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<map>
+ 
+using namespace std;
+ 
+int main(){
+    int n;
+    while(cin>>n){
+        vector<int>v;
+        int val;
+        map<int,int>m;
+        for(int i=0;i<n;++i){
+            scanf("%d",&val);
+            v.push_back(val);
+            m[val]++;
+        }
+        sort(v.begin(),v.end());
+        int min=0;
+        for(int i=0;i<v.size();++i){
+            if(m[v[i]]>=2){ 
+                min+=m[v[i]]*(m[v[i]]-1)/2;
+                i+=m[v[i]]-1;
+            }
+        }
+        int cnt=min;
+        if(min==0){
+            min=0x3f3f3f3f;
+            cnt=0;
+            for(int i=1;i<v.size();++i){
+                if(min>v[i]-v[i-1]){
+                    min=v[i]-v[i-1];
+                    cnt=1;
+                }else if(min==v[i]-v[i-1]){
+                    ++cnt;
+                }
+            }
+        }
+        int maxnum;
+        if(v[0]==v[v.size()-1]){
+            maxnum=v.size()*(v.size()-1)/2;
+        }else{
+            maxnum=m[v[0]]*m[v[v.size()-1]];
+        }
+        cout<<cnt<<" "<<maxnum<<endl;
+         
+      }
+     
+    return 0;
+}
+```
+
