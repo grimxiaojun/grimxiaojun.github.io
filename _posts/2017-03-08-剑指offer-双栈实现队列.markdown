@@ -1,0 +1,55 @@
+---
+layout: post
+title:  "牛客网 剑指offer 双栈实现队列"
+
+---
+时间限制：1秒空间限制：32768K热度指数：18329
+
+本题知识点：[队列](https://www.nowcoder.com/questionCenter?questionTypes=000100&mutiTagIds=582)[栈](https://www.nowcoder.com/questionCenter?questionTypes=000100&mutiTagIds=581)
+
+**算法知识视频讲解
+
+## 题目描述
+
+用两个栈来实现一个队列，完成队列的Push和Pop操作。队列中的元素为int类型。
+
+
+
+注意点：当push时压入栈1，当pop，判断栈2是否为空，若为空将栈1的元素压入栈2，然后pop出栈顶元素，若不为空直接pop出来即可
+
+
+
+代码如下：
+
+```c++
+class Solution
+{
+public:
+   void push(int node) {
+		this->stack1.push(node);
+       ++n;
+    }
+
+    int pop() {
+		if(this->stack2.size()==0){
+			for(int i=1;i<=n;++i){
+				int temp=stack1.top();
+				this->stack2.push(temp);
+				stack1.pop();
+			}
+            n=0;
+			
+		}
+
+		int val=stack2.top();
+		stack2.pop();
+		return val;
+    }
+
+private:
+    int n=0;
+    stack<int> stack1;
+    stack<int> stack2;
+};
+```
+

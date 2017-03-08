@@ -1,0 +1,55 @@
+---
+layout: post
+title:  "牛客网 剑指offer 重建二叉树"
+
+---
+时间限制：1秒空间限制：32768K热度指数：15259
+
+
+
+## 题目描述
+
+输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。例如输入前序遍历序列{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}，则重建二叉树并返回。
+
+代码如下：
+
+```c++
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    struct TreeNode* print_tree(int root,int start,int end,struct TreeNode * tree,vector<int> pre,vector<int> in){
+        if(start>end){
+            return NULL;
+        }
+        int i=start;
+        for(;i<end;++i){
+            if(pre[root]==in[i]){
+                break;
+            }
+        }
+        //tree->val=pre[root];
+        if(tree==NULL){
+            tree=new struct TreeNode(pre[root]);
+        }
+        
+        tree->left=print_tree(root+1,start,i-1,tree->left,pre,in);
+        tree->right=print_tree(root+(i-start+1),i+1,end,tree->right,pre,in);
+        return tree;
+    }
+    struct TreeNode* reConstructBinaryTree(vector<int> pre,vector<int> vin) {
+		struct TreeNode *tree=NULL;
+        int n=pre.size();
+		tree=print_tree(0,0,n-1,tree,pre,vin);			
+		return tree;
+    }
+};
+```
+
