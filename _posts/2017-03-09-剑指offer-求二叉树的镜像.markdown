@@ -1,0 +1,55 @@
+---
+layout: post
+title:  "牛客网 剑指offer 二叉树的镜像"
+
+---
+时间限制：1秒空间限制：32768K热度指数：12848
+
+**算法知识视频讲解
+
+## 题目描述
+
+##### **输入描述:**
+
+```
+二叉树的镜像定义：源二叉树 
+    	    8
+    	   /  \
+    	  6   10
+    	 / \  / \
+    	5  7 9 11
+    	镜像二叉树
+    	    8
+    	   /  \
+    	  10   6
+    	 / \  / \
+    	11 9 7  5
+```
+
+就是简单递归，将左孩子变成右孩子，右孩子变成左孩子，利用一个temp保存需要先换的一个即可
+
+代码如下：
+
+```c++
+/*
+struct TreeNode {
+	int val;
+	struct TreeNode *left;
+	struct TreeNode *right;
+	TreeNode(int x) :
+			val(x), left(NULL), right(NULL) {
+	}
+};*/
+class Solution {
+public:
+    void Mirror(TreeNode *pRoot) {   
+        if(pRoot==NULL)return;   
+		TreeNode *temp=pRoot->right;
+        pRoot->right=pRoot->left;
+        pRoot->left=temp;
+        Mirror(pRoot->left);
+        Mirror(pRoot->right);
+    }
+};
+```
+
