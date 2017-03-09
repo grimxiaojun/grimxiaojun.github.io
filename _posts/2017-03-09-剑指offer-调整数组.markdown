@@ -1,0 +1,40 @@
+---
+layout: post
+title:  "牛客网 剑指offer 调整数组"
+
+---
+时间限制：1秒空间限制：32768K热度指数：15060
+
+本题知识点：[数组](https://www.nowcoder.com/questionCenter?questionTypes=000100&mutiTagIds=578)
+
+**算法知识视频讲解
+
+## 题目描述
+
+输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有的奇数位于数组的前半部分，所有的偶数位于位于数组的后半部分，并保证奇数和奇数，偶数和偶数之间的相对位置不变。
+
+
+
+以空间换时间
+
+代码如下：
+
+```c++
+class Solution {
+public:
+    void reOrderArray(vector<int> &array) {
+        vector<int> a,b;
+        for(int i=0;i<array.size();++i){
+            if(array[i]%2!=0){
+                a.push_back(array[i]);
+            }else{
+                b.push_back(array[i]);
+            }
+        }
+        array.clear();
+        array.insert(array.end(),a.begin(),a.end());
+        array.insert(array.end(),b.begin(),b.end());
+    }
+};
+```
+

@@ -1,0 +1,46 @@
+---
+layout: post
+title:  "牛客网 剑指offer 反转单链表"
+
+---
+时间限制：1秒空间限制：32768K热度指数：15393
+
+本题知识点：[链表](https://www.nowcoder.com/questionCenter?questionTypes=000100&mutiTagIds=580)
+
+**算法知识视频讲解
+
+## 题目描述
+
+输入一个链表，反转链表后，输出链表的所有元素。
+
+
+
+
+
+代码如下：
+
+```c++
+/*
+struct ListNode {
+	int val;
+	struct ListNode *next;
+	ListNode(int x) :
+			val(x), next(NULL) {
+	}
+};*/
+class Solution {
+public:
+    ListNode* ReverseList(ListNode* pHead) {
+        ListNode* result=NULL;
+        ListNode* p=pHead;
+		while(p){
+            ListNode* temp=p->next;
+            p->next=result;
+            result=p;
+            p=temp;
+        }
+        return result;
+    }
+};
+```
+

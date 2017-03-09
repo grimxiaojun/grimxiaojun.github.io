@@ -1,0 +1,39 @@
+---
+layout: post
+title:  "牛客网 剑指offer 求次方"
+
+---
+时间限制：1秒空间限制：32768K热度指数：14709
+
+**算法知识视频讲解
+
+## 题目描述
+
+给定一个double类型的浮点数base和int类型的整数exponent。求base的exponent次方。
+
+
+
+本以为用循环会有什么地方不对，，，囧。。
+
+代码如下：
+
+```c++
+class Solution {
+public:
+    double Power(double base, int exponent) {
+    	
+        if(exponent<0){
+            base=1/base;
+            exponent=0-exponent;
+        }else if(exponent==0){
+            base=1.0;
+        }
+        double result=base;
+        for(int i=2;i<=exponent;++i){
+            result*=base;
+        }
+        return result;
+    }
+};
+```
+
