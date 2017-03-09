@@ -1,0 +1,49 @@
+---
+layout: post
+title:  "牛客网 剑指offer 树的子结构"
+
+---
+时间限制：1秒空间限制：32768K热度指数：11442
+
+**算法知识视频讲解
+
+## 题目描述
+
+输入两棵二叉树A，B，判断B是不是A的子结构。（ps：我们约定空树不是任意一个树的子结构）
+
+
+
+首先当A与B中任一个为空则返回false，若都不为空，查看当前A的value是否等于B的value,若是，则递归检测左孩子与右孩子，递归到B为空时，则说明B是A的子结构，A为空时，说明不是；若当前A的value不等B的value，则需比较A的左孩子，若再不等，比较右孩子。
+
+代码如下：
+
+```c++
+/*
+struct TreeNode {
+	int val;
+	struct TreeNode *left;
+	struct TreeNode *right;
+	TreeNode(int x) :
+			val(x), left(NULL), right(NULL) {
+	}
+};*/
+class Solution {
+public:
+    bool isSubtree(TreeNode* pRoot1, TreeNode* pRoot2){
+        if(pRoot2==NULL)return true;
+        if(pRoot1==NULL)return false;
+        if(pRoot1->val==pRoot2->val){
+            return isSubtree(pRoot1->left,pRoot2->left)&&isSubtree(pRoot1->right,pRoot2->right);
+        }else{
+            return false;
+        }
+    }
+    bool HasSubtree(TreeNode* pRoot1, TreeNode* pRoot2)
+    {
+			if(pRoot1==NULL||pRoot2==NULL)return false;
+        	return isSubtree(pRoot1,pRoot2)||HasSubtree(pRoot1->left,pRoot2)||HasSubtree(pRoot1->right,pRoot2);
+    }
+  	
+};
+```
+

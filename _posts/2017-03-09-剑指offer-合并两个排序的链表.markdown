@@ -1,0 +1,66 @@
+---
+layout: post
+title:  "牛客网 剑指offer 合并两个排序的链表"
+
+---
+时间限制：1秒空间限制：32768K热度指数：13590
+
+本题知识点：[链表](https://www.nowcoder.com/questionCenter?questionTypes=000100&mutiTagIds=580)
+
+**算法知识视频讲解
+
+## 题目描述
+
+输入两个单调递增的链表，输出两个链表合成后的链表，当然我们需要合成后的链表满足单调不减规则。
+
+
+
+首先看A,B是否有空，若一个为空则直接返回另一个，若均不为空，则选择较小的为头，然后依次比较，直到一方为空，然后将剩下的接在result链表中
+
+代码如下：
+
+```c++
+/*
+struct ListNode {
+	int val;
+	struct ListNode *next;
+	ListNode(int x) :
+			val(x), next(NULL) {
+	}
+};*/
+class Solution {
+public:
+    ListNode* Merge(ListNode* pHead1, ListNode* pHead2)
+    {
+		if(pHead1==NULL)return pHead2;
+        if(pHead2==NULL)return pHead1;
+        ListNode* result,*p;
+        if(pHead1->val<=pHead2->val){
+            result=pHead1;
+            pHead1=pHead1->next;
+        }else{
+            result=pHead2;
+            pHead2=pHead2->next;
+        }
+        p=result;
+        while(pHead1&&pHead2){
+            if(pHead1->val<=pHead2->val){
+            	result->next=pHead1;
+                pHead1=pHead1->next;
+            }else{
+                result->next=pHead2;
+           		pHead2=pHead2->next;
+            }
+            result=result->next;
+        }
+        if(pHead1){
+            result->next=pHead1;
+        }
+        if(pHead2){
+            result->next=pHead2;
+        }
+        return p;
+    }
+};
+```
+

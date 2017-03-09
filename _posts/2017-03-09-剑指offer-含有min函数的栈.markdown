@@ -1,0 +1,44 @@
+---
+layout: post
+title:  "牛客网 剑指offer 含有min函数的栈"
+
+---
+时间限制：1秒空间限制：32768K热度指数：10493
+
+本题知识点：[栈](https://www.nowcoder.com/questionCenter?questionTypes=000100&mutiTagIds=581)
+
+**算法知识视频讲解
+
+## 题目描述
+
+定义栈的数据结构，请在该类型中实现一个能够得到栈最小元素的min函数。
+
+
+
+利用vector,min函数即为求最小值，遍历一遍vector即可，其余操作与stack无太大区别，因为vector一般也是尾部进行插入删除，最大值只需输出最后一个数即可
+
+代码如下：
+
+```c++
+class Solution {
+public:
+    void push(int value) {
+        v.push_back(value);
+    }
+    void pop() {
+        v.pop_back();
+    }
+    int top() {
+        return v[v.size()-1];
+    }
+    int min() {
+        int num=INT_MAX;
+        for(int i=0;i<v.size();++i){
+            if(num>v[i])num=v[i];
+        }
+        return num;
+    }
+    vector<int>v;
+};
+```
+
