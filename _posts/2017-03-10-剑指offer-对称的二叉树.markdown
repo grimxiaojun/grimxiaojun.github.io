@@ -1,0 +1,52 @@
+---
+layout: post
+title:  "牛客网 剑指offer 对称的二叉树"
+
+---
+时间限制：1秒空间限制：32768K热度指数：5138
+
+**算法知识视频讲解
+
+## 题目描述
+
+请实现一个函数，用来判断一颗二叉树是不是对称的。注意，如果一个二叉树同此二叉树的镜像是同样的，定义其为对称的。
+
+
+
+
+
+题解：利用镜像的含义，左子树等于右子数，左子树的左子树=右子数的右子数
+
+左子树的右子数=右子数的左子树
+
+代码如下：
+
+```c++
+/*
+struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+    TreeNode(int x) :
+            val(x), left(NULL), right(NULL) {
+    }
+};
+*/
+class Solution {
+public:
+    bool isSymmetrical(TreeNode* pRoot)
+    {
+        if(pRoot==NULL)return true;
+        return isTrue(pRoot->left,pRoot->right);
+    	
+    }
+    bool isTrue(TreeNode* pRoot,TreeNode* Mirr){
+    	if(pRoot==NULL) return Mirr==NULL;
+        if(Mirr==NULL) return false;
+        if(pRoot->val!=Mirr->val)return false;
+        return isTrue(pRoot->left,Mirr->right)&&isTrue(pRoot->right,Mirr->left);
+    }
+	
+};
+```
+

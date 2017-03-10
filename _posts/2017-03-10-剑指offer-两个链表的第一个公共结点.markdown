@@ -1,0 +1,59 @@
+---
+layout: post
+title:  "牛客网 剑指offer 两个链表的第一个公共结点"
+
+---
+时间限制：1秒空间限制：32768K热度指数：7252
+
+本题知识点：[链表](https://www.nowcoder.com/questionCenter?questionTypes=000100&mutiTagIds=580)
+
+**算法知识视频讲解
+
+## 题目描述
+
+输入两个链表，找出它们的第一个公共结点。
+
+
+
+
+
+题解：利用set或者map保存第一个链表的所有结点值，然后遍历第二条链表，若在set或map中有值则返回当前结点，遍历结束后仍无则返回NULL；
+
+(ps:若利用map,可如下定义与保存，)
+
+```c++
+map<int,int>m;   //定义
+m[pHead1->val]++;   //保存
+if(m[pHead2->val]>0)return pHead2;//判断
+```
+
+代码如下：
+
+```c++
+/*
+struct ListNode {
+	int val;
+	struct ListNode *next;
+	ListNode(int x) :
+			val(x), next(NULL) {
+	}
+};*/
+class Solution {
+public:
+    ListNode* FindFirstCommonNode( ListNode* pHead1, ListNode* pHead2) {
+        set<int>s;
+        while(pHead1){
+            s.insert(pHead1->val);
+            pHead1=pHead1->next;
+        }
+        while(pHead2){
+            if(s.find(pHead2->val)!=s.end()){
+                return pHead2;
+            }
+            pHead2=pHead2->next;
+        }
+        return NULL;
+    }
+};
+```
+

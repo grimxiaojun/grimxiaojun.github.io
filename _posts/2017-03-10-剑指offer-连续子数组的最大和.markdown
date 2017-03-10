@@ -1,0 +1,54 @@
+---
+layout: post
+title:  "牛客网 剑指offer 连续子数组的最大和"
+---
+时间限制：1秒空间限制：32768K热度指数：8659
+
+本题知识点：[数组](https://www.nowcoder.com/questionCenter?questionTypes=000100&mutiTagIds=578)
+
+**算法知识视频讲解
+
+## 题目描述
+
+HZ偶尔会拿些专业问题来忽悠那些非计算机专业的同学。今天测试组开完会后,他又发话了:在古老的一维模式识别中,常常需要计算连续子向量的最大和,当向量全为正数的时候,问题很好解决。但是,如果向量中包含负数,是否应该包含某个负数,并期望旁边的正数会弥补它呢？例如:{6,-3,-2,7,-15,1,2,2},连续子向量的最大和为8(从第0个开始,到第3个为止)。你会不会被他忽悠住？(子向量的长度至少是1)
+
+
+
+
+
+题解：这个题就是求最大子序列和，利用动态规划即可，定义两个值，一个maxsum,一个tempsum,利用tempsum依次加，
+
+若大于maxsum，maxsum=tempsum,若tempsum<0则tempsum=0;
+
+然后需要注意全负的情况，利用一个flag判断，利用一个max记录负数中最大的即可
+
+代码如下：
+
+```c++
+class Solution {
+public:
+    int FindGreatestSumOfSubArray(vector<int> array) {
+    	int maxsum=0;
+        int tempsum=0;
+        int flag=0,max=INT_MIN;
+        for(int i=0;i<array.size();++i){
+            tempsum+=array[i];
+            if(array[i]>=0)flag=1;
+            if(array[i]>max)max=array[i];
+            if(tempsum>maxsum){
+                maxsum=tempsum;
+            }
+            if(tempsum<0){
+                tempsum=0;
+            }
+        }
+        if(flag==0){
+            return max;
+        }else{
+            return maxsum;
+        }
+        
+    }
+};
+```
+

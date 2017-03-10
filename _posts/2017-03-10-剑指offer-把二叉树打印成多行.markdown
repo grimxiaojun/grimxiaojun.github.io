@@ -1,0 +1,68 @@
+---
+layout: post
+title:  "牛客网 剑指offer 把二叉树打印成多行"
+
+---
+时间限制：1秒空间限制：32768K热度指数：4603
+
+**算法知识视频讲解
+
+## 题目描述
+
+从上到下按层打印二叉树，同一层结点从左至右输出。每一层输出一行。
+
+
+
+
+
+题解：由于是打印出多行，所以要用队列的话必须判断出一行的 结束点，这个点其实不太好判断，所以我利用了一个结构体，结构体存val,与height,
+
+这样的话便将每一个点的高度与值均存下来了，现在只需要根据高度来赋值就好
+
+代码如下：
+
+```c++
+/*
+struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+    TreeNode(int x) :
+            val(x), left(NULL), right(NULL) {
+    }
+};
+*/
+struct Node{
+  int index;
+  int val;
+}node;
+class Solution {
+public:
+        vector<vector<int> > Print(TreeNode* pRoot) {
+        	vector<Node>v;    
+           	dfs(pRoot,v,0);
+            int h=getHeight(pRoot);
+            vector<vector<int> >result(h);
+            for(int i=0;i<v.size();++i){
+                result[v[i].index].push_back(v[i].val);
+            }
+            return result;
+        }
+    	void dfs(TreeNode* pRoot,vector<Node> &v,int height){
+            if(pRoot==NULL)return;
+            node.index=height;
+            node.val=pRoot->val;
+            v.push_back(node);
+            dfs(pRoot->left,v,height+1);
+            dfs(pRoot->right,v,height+1);
+        }
+    	int getHeight(TreeNode* pRoot){
+            if(pRoot==NULL)return 0;
+            int l=getHeight(pRoot->left);
+            int r=getHeight(pRoot->right);
+            return l>r?l+1:r+1;
+        }
+    	
+};
+```
+

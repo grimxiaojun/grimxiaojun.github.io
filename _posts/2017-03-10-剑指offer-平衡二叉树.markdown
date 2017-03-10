@@ -1,0 +1,46 @@
+---
+layout: post
+title:  "牛客网 剑指offer 平衡二叉树"
+
+---
+时间限制：1秒空间限制：32768K热度指数：6833
+
+**算法知识视频讲解
+
+## 题目描述
+
+输入一棵二叉树，判断该二叉树是否是平衡二叉树。
+
+
+
+
+
+题解：判断是否为平衡二叉树的条件是左孩子的高度与右孩子的高度相差至少为2时就不平衡，否则平衡，所以定义一个getheight函数来获得结点的高度，然后进行递归判断是否为平衡二叉树即可
+
+注意当传入的结点为空时则为平衡二叉树，因为此时遍历完一条边，需要计算高度来判断是否为平衡二叉树，所以需要返回true.
+
+
+
+代码如下：
+
+```c++
+class Solution {
+public:
+    bool IsPopOrder(vector<int> pushV,vector<int> popV) {
+        stack<int> s;int index=0;
+        for(int i=0;i<pushV.size();++i){
+            s.push(pushV[i]);  
+            while(index<popV.size()&&s.top()==popV[index]){
+                ++index;
+                s.pop();
+            }
+        }
+        if(index==popV.size()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+};
+```
+
