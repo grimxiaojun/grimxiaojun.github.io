@@ -1,0 +1,54 @@
+---
+layout: post
+title:  "牛客网 剑指offer 链表中环的入口结点"
+
+---
+时间限制：1秒空间限制：32768K热度指数：5105
+
+本题知识点：[链表](https://www.nowcoder.com/questionCenter?questionTypes=000100&mutiTagIds=580)
+
+**算法知识视频讲解
+
+## 题目描述
+
+一个链表中包含环，请找出该链表的环的入口结点。
+
+
+
+
+
+题解：利用STL的强大功能中的之一set，
+
+若不用set
+
+代码如下：
+
+```c++
+/*
+struct ListNode {
+    int val;
+    struct ListNode *next;
+    ListNode(int x) :
+        val(x), next(NULL) {
+    }
+};
+*/
+class Solution {
+public:
+    ListNode* EntryNodeOfLoop(ListNode* pHead)
+    {
+        if(pHead==NULL)return NULL;
+		set<ListNode*>s;
+        while(pHead){
+            if(s.find(pHead)!=s.end()){
+                return pHead;
+            }else{
+                s.insert(pHead);
+                pHead=pHead->next;
+            }
+        }
+        return NULL;
+    }
+};
+```
+
