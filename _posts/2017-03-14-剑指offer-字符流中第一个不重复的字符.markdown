@@ -1,0 +1,62 @@
+---
+layout: post
+title:  "牛客网 剑指offer 字符流中第一个不重复的字符"
+
+---
+时间限制：1秒空间限制：32768K热度指数：4286
+
+本题知识点：[字符串](https://www.nowcoder.com/questionCenter?questionTypes=000100&mutiTagIds=579)
+
+**算法知识视频讲解
+
+## 题目描述
+
+##### **输出描述:**
+
+```
+如果当前字符流没有存在出现一次的字符，返回#字符。
+```
+
+
+
+
+
+题解：利用map值为1
+
+
+
+代码如下：
+
+```c++
+class Solution
+{
+public:
+   unordered_map<char,int>m;
+   vector<char>v;
+  //Insert one char from stringstream
+    void Insert(char ch)
+    {
+         m[ch]++;
+        v.push_back(ch);
+    }
+  //return the first appearence once char in current stringstream
+    char FirstAppearingOnce()
+    {
+        /*
+        for(auto b=m.begin();b!=m.end();++b){
+            if(b->second==1){
+                return b->first;
+            }
+        }*/
+        
+    	for(int i=0;i<v.size();++i){
+            if(m[v[i]]==1){
+                return v[i];
+            }
+        }
+        return '#';
+    }
+	
+};
+```
+
