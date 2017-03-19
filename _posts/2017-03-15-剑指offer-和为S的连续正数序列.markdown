@@ -1,0 +1,57 @@
+---
+layout: post
+title:  "牛客网 剑指offer 和为S的连续正数序列"
+
+---
+时间限制：1秒空间限制：32768K热度指数：6377
+
+**算法知识视频讲解
+
+## 题目描述
+
+##### **输出描述:**
+
+```
+输出所有和为S的连续正数序列。序列内按照从小至大的顺序，序列间按照开始数字从小到大的顺序
+```
+
+
+
+题解：//sum=(a1+an)n/2;n=an-a1+1;
+
+(a1+an)(an-a1+1)=2*sum=d\*l;
+
+a1=(d-l+1)/2;an=(d+l-1)/2
+
+代码如下：
+
+```c++
+
+//s=(a1+an)n/2;n=an-a1+1;
+
+class Solution {
+public:
+    
+    
+    vector<vector<int> > FindContinuousSequence(int sum) {
+        vector<vector<int> >v;
+        int s=(int)sqrt(2*sum);
+        for(int i=s;i>=2;--i){
+            if(2*sum%i==0){
+                int d=2*sum/i;
+                if((d%2==0&&i%2!=0)||(d%2!=0&&i%2==0)){
+                    vector<int>temp;
+                    int a1=(d-i+1)/2;
+                    int a2=(d+i-1)/2;
+                    for(int j=a1;j<=a2;++j){
+                        temp.push_back(j);
+                    }
+                    v.push_back(temp);
+                }
+            }
+        }
+        return v;
+    }
+};
+```
+

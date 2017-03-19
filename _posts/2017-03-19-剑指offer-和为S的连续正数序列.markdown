@@ -1,0 +1,113 @@
+---
+layout: post
+title:  "牛客网 剑指offer 和为S的两个数字"
+
+---
+时间限制：1秒空间限制：32768K热度指数：7214
+
+**算法知识视频讲解
+
+## 题目描述
+
+##### **输出描述:**
+
+```
+对应每个测试案例，输出两个数，小的先输出。
+```
+
+
+
+
+
+题解：利用vector
+
+一种利用两层FOR循环然后进行剪枝；
+
+一种利用set存储数组中的值，因为递增序列，所以本身就无重复的，恰好可以用set
+
+然后遍历查询是否sum-*b在不在set中，若在，则保存到vector中
+
+代码如下：
+
+```c++
+class Solution {
+public:
+    vector<int> FindNumbersWithSum(vector<int> array,int sum) {
+        vector<int>v;
+        int index=array.size()-1;
+        for(int i=0;i<array.size();++i){
+            for(int j=index;j>i;--j){
+                if((array[i]+array[j])>sum){
+                    --index;
+                }else if((array[i]+array[j])<sum){
+                    continue;
+                }else{
+                    v.push_back(array[i]);
+                    v.push_back(array[j]);
+                }
+            }
+        }
+        if(v.size()==0)return v;
+        int indexi,indexj,min;
+        for(int i=0;i<v.size();i=i+2){
+            if(i==0){
+                min=v[i]*v[i+1];
+                indexi=v[i];indexj=v[i+1];
+            }else if((v[i]*v[i+1])<min){
+                min=v[i]*v[i+1];
+                indexi=v[i];indexj=v[i+1];
+            }
+            
+        }
+        v.clear();
+        v.push_back(indexi);
+        v.push_back(indexj);
+        return v;
+    }
+};
+
+
+
+//第二种：
+class Solution {
+public:
+    vector<int> FindNumbersWithSum(vector<int> array,int sum) {
+        vector<int>v;
+        set<int>s;
+        set<int>se;
+        int index=array.size()-1;
+        for(int i=0;i<array.size();++i){
+          s.insert(array[i]);
+        }
+        for(auto b=s.begin();b!=s.end();++b){
+            if(se.find(*b)!=se.end())continue;
+            if(s.find(sum-*b)!=s.end()){
+                v.push_back(*b);
+                v.push_back(sum-*b);
+                se.insert(*b);
+                se.insert(sum-*b);
+            }
+        }   
+        if(v.size()==0)return v;
+        int indexi,indexj,min;
+        for(int i=0;i<v.size();i=i+2){
+            if(i==0){
+                min=v[i]*v[i+1];
+                indexi=v[i];indexj=v[i+1];
+            }else if((v[i]*v[i+1])<min){
+                min=v[i]*v[i+1];
+                indexi=v[i];indexj=v[i+1];
+            }
+            
+        }
+        v.clear();
+        v.push_back(indexi);
+        v.push_back(indexj);
+        return v;
+    }
+};
+
+
+
+```
+
