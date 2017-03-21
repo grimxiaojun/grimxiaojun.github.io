@@ -1,0 +1,107 @@
+---
+layout: post
+title:  "美团在线编程题 拜访"
+
+---
+时间限制：3秒 空间限制：32768K 热度指数：1673
+
+本题知识点： [动态规划](https://www.nowcoder.com/questionCenter?questionTypes=000100&mutiTagIds=593)
+
+** 算法知识视频讲解
+
+## 题目描述
+
+现在有一个城市销售经理，需要从公司出发，去拜访市内的商家，已知他的位置以及商家的位置，但是由于城市道路交通的原因，他只能在左右中选择一个方向，在上下中选择一个方向，现在问他有多少种方案到达商家地址。
+
+给定一个地图**map**及它的长宽**n**和**m**，其中1代表经理位置，2代表商家位置，-1代表不能经过的地区，0代表可以经过的地区，请返回方案数，保证一定存在合法路径。保证矩阵的长宽都小于等于10。
+
+测试样例：
+
+```
+[[0,1,0],[2,0,0]],2,3
+返回：2
+```
+
+
+
+
+
+题解：这道题我没有用动态规划做，就利用图论解决的，
+
+1.找出经理与商家位置，然后判断经理应该往哪边走，
+
+2.然后递归查询，走过的路标记，返回的时候重新标记
+
+最后返回cnt即可
+
+代码如下：
+
+```c++
+class Visit {
+public:
+    
+    const static void Count(int d1,int d2,int d3,int d4,int x1,int y1,int x2,int y2,vector<vector<int> > map,int n,int m,vector<vector<int> >&allow,int &cnt){
+        
+		if(x1+d1==x2&&y1+d2==y2){
+			++cnt;
+			return ;
+		}
+		if(x1+d3==x2&&y1+d4==y2){
+			++cnt;
+			return ;
+		}
+        if((x1+d1)>=0&&(x1+d1)<n&&(y1+d2)>=0&&(y1+d2)<m&&allow[x1+d1][y1+d2]!=0){
+			
+            allow[x1][y1]=0;
+			//cout<<"yy";
+            Count(d1,d2,d3,d4,x1+d1,y1+d2,x2,y2,map,n,m,allow,cnt);
+			allow[x1][y1]=1;
+        }
+        if((x1+d3)>=0&&(x1+d3)<n&&(y1+d4)>=0&&(y1+d4)<m&&allow[x1+d3][y1+d4]!=0){
+			
+            allow[x1][y1]=0;
+			//cout<<" xx";
+            Count(d1,d2,d3,d4,x1+d3,y1+d4,x2,y2,map,n,m,allow,cnt);
+			allow[x1][y1]=1;
+        }
+        
+    }
+    
+    
+    
+    
+    int countPath(vector<vector<int> > map, int n, int m) {
+        // write code here
+        int x1,y1,x2,y2;
+        vector<vector<int> >allow(n,vector<int>(m,0));
+        for(int i=0;i<n;++i){
+            for(int j=0;j<m;++j){
+                if(map[i][j]==1){
+                    x1=i;y1=j;
+                }else if(map[i][j]==2){
+                    x2=i;y2=j;
+                }else if(map[i][j]==0){
+                    allow[i][j]=1;
+                }
+            }
+        }		
+        int d1,d2,d3,d4;
+        if(x2>=x1){
+            d1=1;d2=0;
+        }else{
+            d1=-1;d2=0;
+        }
+        if(y2>=y1){
+            d3=0;d4=1;
+        }else{
+            d3=0;d4=-1;
+        }
+        int cnt=0;
+        Count(d1,d2,d3,d4,x1,y1,x2,y2,map,n,m,allow,cnt); 
+		//cout<<cnt<<endl;
+		//cout<<coun;
+        return cnt;
+    }
+};
+```
+
