@@ -1,0 +1,46 @@
+---
+layout: post
+title:  "剑指offer 从尾到头打印链表"
+
+---
+时间限制：1秒 空间限制：32768K 热度指数：25160
+
+本题知识点： [链表](https://www.nowcoder.com/questionCenter?questionTypes=000100&mutiTagIds=580)
+
+** 算法知识视频讲解
+
+## 题目描述
+
+输入一个链表，从尾到头打印链表每个节点的值。
+
+
+
+利用dfs即可
+
+代码如下：
+
+```c++
+/**
+*  struct ListNode {
+*        int val;
+*        struct ListNode *next;
+*        ListNode(int x) :
+*              val(x), next(NULL) {
+*        }
+*  };
+*/
+class Solution {
+public:
+    void dfs(ListNode* head,vector<int>&v){
+        if(head==NULL)return;
+        dfs(head->next,v);
+        v.push_back(head->val);
+    }
+    vector<int> printListFromTailToHead(ListNode* head) {
+        vector<int>v;
+        dfs(head,v);
+        return v;
+    }
+};
+```
+
