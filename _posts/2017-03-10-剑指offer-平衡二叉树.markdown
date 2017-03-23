@@ -26,21 +26,27 @@ title:  "牛客网 剑指offer 平衡二叉树"
 ```c++
 class Solution {
 public:
-    bool IsPopOrder(vector<int> pushV,vector<int> popV) {
-        stack<int> s;int index=0;
-        for(int i=0;i<pushV.size();++i){
-            s.push(pushV[i]);  
-            while(index<popV.size()&&s.top()==popV[index]){
-                ++index;
-                s.pop();
+    int getHeight(TreeNode* pRoot){
+        if(pRoot==NULL)return 0;
+        int l=getHeight(pRoot->left);
+        int r=getHeight(pRoot->right);
+        return l>r?l+1:r+1;
+    }
+    bool IsBalanced_Solution(TreeNode* pRoot) {
+		if(pRoot==NULL)return true;
+        if(IsBalanced_Solution(pRoot->left)&&IsBalanced_Solution(pRoot->right)){
+            int l=getHeight(pRoot->left);
+            int r=getHeight(pRoot->right);
+            if(l>r&&l-r>=2){
+                return false;
+            }else if(r>l&&r-l>=2){
+                return false;
+            }else{
+                return true;
             }
         }
-        if(index==popV.size()){
-            return true;
-        }else{
-            return false;
-        }
-    }
+        return false;               
+    }	
 };
 ```
 
