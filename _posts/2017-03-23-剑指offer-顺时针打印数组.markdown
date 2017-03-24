@@ -17,6 +17,10 @@ title:  "剑指offer 顺时针打印数组"
 
 题解：利用d二位数组确定是否改变方向，利用v存储走过的结点
 
+
+
+
+
 代码如下：
 
 ```c++
@@ -29,11 +33,7 @@ public:
             return false;
         }
     }
-    vector<int> printMatrix(vector<vector<int> > matrix) {
-        	
-        
-        
-        
+    vector<int> printMatrix(vector<vector<int> > matrix) {  
         	vector<int>r;
 			int n=matrix.size();
         	int m=matrix[0].size();
