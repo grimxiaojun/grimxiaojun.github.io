@@ -1,0 +1,258 @@
+---
+layout: post
+title:  "2017春季华为机试"
+
+---
+# 第一题：反转数字后相加得出结果
+
+如输入123，456
+
+输出975
+
+代码如下：
+
+```c++
+#include<iostream>
+using namespace std;
+int reverseAdd(int a,int b){
+	if(a<1||a>70000||b<1||b>70000){      
+		return -1;
+	}
+	int a1=0,b1=0;
+	int index=10;
+	while(a){
+		a1=a1*index+a%10;
+		a/=10;		
+	}	
+	while(b){
+		b1=b1*index+b%10;
+		b/=10;		
+	}		
+	return a1+b1;
+}
+int main(){
+	int a,b;
+	while(cin>>a>>b){
+		int result=reverseAdd(a,b);
+        cout<<result<<endl;
+	}
+	return 0;
+}
+```
+
+# 第二题：丢骰子，
+
+输入LRFBAC
+
+L代表左转，R代表右转，F向前翻转，B代表向后翻转，A代表逆时针，C代表顺时针，
+
+初始骰子点为左1右2前3后4上5下6
+
+
+
+代码如下：
+
+```c++
+#include<iostream>
+#include<string>
+#include<vector>
+using namespace std;
+
+int main(){
+	string s;
+	cin>>s;
+	vector<int>v(7);
+	for(int i=1;i<=6;++i){
+		v[i]=i;
+	}
+	int temp=0;
+	for(int i=0;i<s.size();++i){
+		switch(s[i]){
+		case 'L':
+			temp=v[1];
+			v[1]=v[5];
+			v[5]=v[2];
+			v[2]=v[6];
+			v[6]=temp;
+			break;
+		case 'R':
+			temp=v[1];
+			v[1]=v[6];
+			v[6]=v[2];
+			v[2]=v[5];
+			v[5]=temp;
+			break;
+		case 'F':
+			temp=v[3];
+			v[3]=v[5];
+			v[5]=v[4];
+			v[4]=v[6];
+			v[6]=temp;
+			break;
+		case 'B':
+			temp=v[3];
+			v[3]=v[6];
+			v[6]=v[4];
+			v[4]=v[5];
+			v[5]=temp;
+			break;
+		case 'A':
+			temp=v[1];
+			v[1]=v[4];
+			v[4]=v[2];
+			v[2]=v[3];
+			v[3]=temp;
+			break;
+		case 'C':
+			temp=v[1];
+			v[1]=v[3];
+			v[3]=v[2];
+			v[2]=v[4];
+			v[4]=temp;
+			break;
+		default:
+			break;
+		}
+	}
+	for(int i=1;i<=6;++i){
+		cout<<v[i];
+	}
+	return 0;
+}
+```
+
+
+# 第三题：
+
+忘了具体，等公布出来再写
+
+找最短时间
+
+
+
+代码如下：
+
+```c++
+
+#include<iostream>
+#include<vector>
+using namespace std;
+
+vector<vector<int> >v(7,vector<int>(7));
+void init(){
+	v[1][1]=0;
+	v[1][2]=2;
+	v[1][3]=10;
+	v[1][4]=5;
+	v[1][5]=3;
+	v[1][6]=-1;
+	v[2][1]=-1;
+	v[2][2]=0;
+	v[2][3]=12;
+	v[2][4]=-1;
+	v[2][5]=-1;
+	v[2][6]=10;
+	v[3][1]=-1;
+	v[3][2]=-1;
+	v[3][3]=0;
+	v[3][4]=-1;
+	v[3][5]=7;
+	v[3][6]=-1;
+	v[4][1]=2;
+	v[4][2]=-1;
+	v[4][3]=-1;
+	v[4][4]=0;
+	v[4][5]=2;
+	v[4][6]=-1;
+	v[5][1]=4;
+	v[5][2]=-1;
+	v[5][3]=-1;
+	v[5][4]=1;
+	v[5][5]=0;
+	v[5][6]=-1;
+	v[6][1]=3;
+	v[6][2]=-1;
+	v[6][3]=1;
+	v[6][4]=-1;
+	v[6][5]=2;
+	v[6][6]=0;
+
+}
+int x,y;
+vector<int>path(7);
+vector<int>dist(7,1000);
+vector<int>collection(7);
+
+void Dijstra(int start){
+	dist[start]=0;
+	path[start]=0;
+	
+	int root=start;
+	int flag1=0;
+	while(1){
+		int flag=0;
+		int min=1000;
+		for(int i=1;i<=6;++i){
+			
+			if(collection[i]==0&&v[start][i]!=-1&&v[start][i]<min){
+				root=i;
+				flag=1;
+				
+				min=v[start][i];
+			}
+		}
+		start=root;
+		
+		if((root==x||flag==0||min==1000))break;
+		collection[root]=1;
+		
+		for(int i=1;i<=6;++i){
+			if(collection[i]==0&&v[root][i]!=-1){
+				if(dist[i]>dist[root]+v[root][i]){
+					
+					dist[i]=dist[root]+v[root][i];
+					path[i]=root;					
+				}
+			}
+		}
+
+	}
+
+}
+
+
+int main(){
+
+	init();
+	
+	scanf("%d%d",&x,&y);
+	for(int i=1;i<=6;++i){
+		v[i][y]=-1;
+		v[y][i]=-1;
+	}
+	Dijstra(5);
+	cout<<dist[x]<<endl;
+	int index=x;
+	vector<int>pa;
+	if(path[index]){
+		pa.push_back(x);
+	}
+	
+	while(path[index]){
+		pa.push_back(path[index]);
+		index=path[index];
+	}
+	
+	cout<<"[";
+	for(int i=pa.size()-1;i>=0;--i){
+		if(i!=0){
+			cout<<pa[i]<<", ";
+		}else{
+			cout<<pa[i];
+		}
+		
+	}
+	cout<<"]"<<endl;
+	return 0;
+}
+```
