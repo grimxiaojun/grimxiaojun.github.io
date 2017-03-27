@@ -1,0 +1,105 @@
+---
+layout: post
+title:  "剑指offer 有趣的数字"
+
+---
+链接：[https://www.nowcoder.com/questionTerminal/af709ab9ca57430886632022e543d4c6](https://www.nowcoder.com/questionTerminal/af709ab9ca57430886632022e543d4c6)
+来源：牛客网
+
+小Q今天在上厕所时想到了这个问题：有n个数，两两组成二元组，差最小的有多少对呢？差最大呢？ 
+
+
+
+
+
+**输入描述:**
+`
+ 输入包含多组测试数据。
+ 对于每组测试数据：
+ N - 本组测试数据有n个数
+ a1,a2...an - 需要计算的数据
+ 保证:
+ 1<=N<=100000,0<=ai<=INT_MAX.
+  `
+
+
+
+
+**输出描述:**
+`
+对于每组数据，输出两个数，第一个数表示差最小的对数，第二个数表示差最大的对数。
+`
+
+
+
+**输入例子:**
+`6
+45 12 45 32 5 6
+`
+
+
+**输出例子:**
+`1 2`
+
+
+
+题解：
+
+先排序，再判断是否有相同，若有相同则最小必为相同的数字，若无则没有相同，再遍历一次即可得出最小差的对数
+
+最大差的对数，判断首尾元素是否相等，若相等，则所有的都相等，便可得出最大差对数，若不等，则为第一个数的个数*最后一个书的个数
+
+代码如下：
+
+```c++
+#include<iostream>
+#include<vector>
+#include<map>
+#include<algorithm>
+using namespace std;
+ 
+#define MAXN 0x3f3f3f3f
+ 
+int main(){
+    int n;
+    while(cin>>n){
+        vector<int>v;
+        map<int,int>m;
+        int val;
+        for(int i=0;i<n;++i){
+            scanf("%d",&val);
+            v.push_back(val);
+            m[val]++;
+        }
+        sort(v.begin(),v.end());
+        int minnum=0,index,maxnum;
+        for(int i=0;i<v.size();++i){
+            if(m[v[i]]>=2){
+                minnum+=m[v[i]]*(m[v[i]]-1)/2;
+                i+=m[v[i]]-1;
+            }
+        }
+ 
+        if(minnum==0){
+            index=MAXN;
+            for(int i=1;i<v.size();++i){
+                if(v[i]-v[i-1]<index){
+                    index=v[i]-v[i-1];
+                    minnum=1;
+                }else if(v[i]-v[i-1]==index){
+                    ++minnum;
+                }
+            }
+        }
+        if(v[0]==v[v.size()-1]){
+            maxnum=v.size()*(v.size()-1)/2;
+        }else{
+            maxnum=m[v[0]]*m[v[v.size()-1]];
+        }
+        printf("%d %d\n",minnum,maxnum);
+    }
+     
+    return 0;
+}
+```
+
