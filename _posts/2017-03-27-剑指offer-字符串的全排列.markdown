@@ -1,0 +1,50 @@
+---
+layout: post
+title:  "剑指offer 字符串的全排列"
+
+---
+
+来源：牛客网
+
+如abc,结果为abc,acb,bac,bca,cab,cba`
+
+
+
+题解：
+
+
+
+代码如下：
+
+```c++
+vector<string> Permutation(string str) {
+        vector<string>v;
+        Perm(str,0,str.size()-1,v);
+        sort(v.begin(),v.end());
+        return v;
+    }
+
+bool IsSwap(string v,int a,int b){
+	for(int i=a;i<b;++i){
+		if(v[i]==v[b]){
+			return false;
+		}
+	}
+	return true;
+}
+
+void Perm(string s,int k,int m,vector<string>&v){
+	if(k==m){
+		v.push_back(s);
+	}else{
+		for(int i=k;i<=m;++i){
+			if(IsSwap(s,k,i)){
+				swap(s[k],s[i]);
+				Perm(s,k+1,m,v);
+				swap(s[k],s[i]);
+			}
+		}
+	}
+}
+```
+
