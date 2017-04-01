@@ -1,0 +1,73 @@
+---
+layout: post
+title:  "爸爸去哪儿 01背包变形"
+
+---
+
+题目大意：
+
+时间限制：C/C++语言 1000MS；其他语言 3000MS
+内存限制：C/C++语言 65536KB；其他语言 589824KB
+题目描述：
+小鱼儿和安吉一起去参加爸爸去哪儿，村长交给他们一项任务，是用老乡的水果去给爸爸兑换一个礼物，要求水果和礼物等价，不能多也不能少。假设老乡有n种水果，每种水果的数量不限，每种水果的价值不同。请帮小鱼儿和安吉计算出他们最少要和老乡要几个水果。如果无法兑换返回-1.
+举例：
+1.有3种水果，价值分别是5，2，3。礼物的价值是20.用4个5元的水果正好兑换，其他的兑换方法都要更多的水果，所以返回4
+2.有两种水果，价值分别是5,3，礼物的价值是2.无法正好兑换，所以返回-1
+
+
+
+
+
+代码如下：
+
+```c++
+
+#include<iostream>
+#include<vector>
+#include<string>
+#include<algorithm>
+using namespace std;
+int minCoins(vector<int>v ,int val){
+	if(v.size()==0||val<0)return -1;
+	int n=v.size();
+	int max=INT_MAX;
+	
+	vector<vector<int> >dp(n,vector<int>(val+1));
+	for(int i=1;i<=val;++i){
+		dp[0][i]=max;
+		if(i-v[0]>=0&&dp[0][i-v[0]]!=max){
+			dp[0][i]=dp[0][i-v[0]]+1;
+		}
+	}
+	 int left=0;
+     for(int i=1;i<n;i++){
+         for(int j=1;j<=val;j++){
+              left=max;
+              if(j-v[i]>=0&&dp[i][j-v[i]]!=max){
+                  left=dp[i][j-v[i]]+1;
+              }
+              dp[i][j]=min(left,dp[i-1][j]);
+              //cout<<(dp[i][j])<<" s ";
+         }
+     }
+	cout<<(dp[n-1][val]!=max?dp[n-1][val]:-1)<<endl;
+	return (dp[n-1][val]!=max?dp[n-1][val]:-1);
+}
+
+
+int main(){
+	int n;
+	scanf("%d",&n);
+	vector<int>v(n);
+	for(int i=0;i<n;++i){
+		scanf("%d",&v[i]);
+	}
+	int val;
+	scanf("%d",&val);
+	minCoins(v,val);
+	return 0;
+}
+
+
+```
+
