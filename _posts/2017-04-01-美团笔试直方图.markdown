@@ -1,0 +1,58 @@
+---
+layout: post
+title:  "直方图最大矩阵"
+
+---
+
+时间限制：3秒 空间限制：32768K 热度指数：2290
+
+本题知识点： [动态规划](https://www.nowcoder.com/questionCenter?questionTypes=000100&mutiTagIds=593)
+
+** 算法知识视频讲解
+
+## 题目描述
+
+有一个直方图，用一个整数数组表示，其中每列的宽度为1，求所给直方图包含的最大矩形面积。比如，对于直方图[2,7,9,4],它所包含的最大矩形的面积为14(即[7,9]包涵的7x2的矩形)。
+
+给定一个直方图**A**及它的总宽度**n**，请返回最大矩形面积。保证直方图宽度小于等于500。保证结果在int范围内。
+
+测试样例：
+
+```
+[2,7,9,4,1],5
+返回：14
+```
+
+
+
+
+
+题解：[参考地址](https://www.jiuzhang.com/qa/872/) [参考地址2](http://www.cnblogs.com/gaobaoru-articles/p/5449113.html)
+
+利用栈，使所有元素只进栈出栈一次，使得时间复杂度为O(n),空间复杂度为O(n);
+
+代码如下：
+
+```c++
+class MaxInnerRec {
+public:
+    int countArea(vector<int> A, int n) {
+        // write code here
+        A.push_back(0);
+        stack<int>s;
+        int maxArea=0;
+        int temp,i=0;
+        while(i<n+1){
+            if(s.empty()||A[i]>A[s.top()]){
+                s.push(i);
+                ++i;
+            }else{
+                temp=s.top();
+                s.pop();
+                maxArea=max(maxArea,A[temp]*(s.empty()?i:i-s.top()-1));
+            }
+        }
+        return maxArea;
+    }
+};
+```
