@@ -1,0 +1,73 @@
+---
+layout: post
+title:  "异或 分堆"
+
+---
+
+## 题目大意：
+
+```
+异或运算是常见的二进制运算，给出两个n位二进制数a，b。a异或b的运算依次考虑二进制的每一位，若这一位相同，那么这一位的异或结果就是0，不同就是1。例如a=1100, b=0100。执行a异或b的运算，a的最高位是1，b的最高位是0，两个数字不同所以最高位异或结果是1；a和b次高位都是1，所以次高位异或为0；最后两位它们都是0，所以异或结果也都是0。那么a异或b的答案就是1000。现在输入两个n位二进制数，输出它们异或结果的十进制答案。上述样例中异或的二进制结果为1000，转化成十进制就是8。
+```
+
+代码如下：
+
+```c++
+#include<iostream>
+#include<string>
+#include<cmath>
+using namespace std;
+int change_to_digit(string s){
+	int finalnum=0;
+	for(int i=s.size()-1,j=0;i>=0;--i,++j){
+		finalnum+=(s[i]-'0')*pow((double)2,j);
+	}
+	cout<<finalnum<<endl;
+	return finalnum;
+}
+int main(){
+	int n;
+	scanf("%d",&n);
+	string s1,s2;
+	cin>>s1>>s2;
+	string result="";	
+	for(int i=0;i<n;++i){
+		if(s1[i]==s2[i]){
+			result+="0";
+		}else{
+			result+="1";
+		}
+	}	
+	change_to_digit(result);	
+	return 0;
+}
+```
+
+
+
+## 题目大意：
+
+```
+小明得到了n个石头，他想把这些石头分成若干堆，每堆至少有一个石头。他把这些石堆排在一条直线上，他希望任意相邻两堆的石头数都不一样。小明最后的得分为石头数大于等于k的石堆数，问他最多能得多少分。严格地，小明把n个石头分成了m堆，每堆个数依次为a1，a2.....，am。要求满足：1、ai≥1（1≤i≤m）
+2、ai≠ai+1（1≤i＜m）
+3、a1+a2+...+am＝n
+小明想知道中大于等于的数最多能有多少个？
+```
+
+代码如下：
+
+k,k+1,k,k+1...为最优序列
+
+```c++
+#include<iostream>
+using namespace std;
+int main(){
+	int n,k;
+	scanf("%d%d",&n,&k);
+	int ans;
+	ans=2*n/(2*k+1);
+	if(n%(2*k+1)>=k)++ans;
+	printf("%d\n",ans);
+	return 0;
+}
+```
