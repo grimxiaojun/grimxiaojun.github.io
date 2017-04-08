@@ -18,7 +18,9 @@ social:
     # twitter: 
     mail: swdwangjie@outlook.com
 
-
+ga:
+    id: UA-96239281-2
+    host: auto
 
 
 # 《----------------- 上面的信息修改成你自己的 ---------------------------》
