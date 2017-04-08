@@ -71,3 +71,6 @@ int main(){
 	return 0;
 }
 ```
+
+
+参考网址[赛码网](http://discuss.acmcoder.com/topic/58e78ec01a2f85620527f2d0)
