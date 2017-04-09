@@ -58,3 +58,4 @@ int main(){
 }
 ```
 
+关于更多01背包概念可参考[http://www.hawstein.com/posts/dp-knapsack.html](http://www.hawstein.com/posts/dp-knapsack.html)
