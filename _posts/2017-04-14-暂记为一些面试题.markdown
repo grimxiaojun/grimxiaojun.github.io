@@ -46,7 +46,7 @@ title:  "暂记为一些面试题"
 
 完整的如下图![Android系统架构](../../../images/photo/android.jpg)
 
-或![Android系统架构图](../../../images/photo/android1.PNG)
+或![Android系统架构图](../../../images/photo/android1.png)
 
 4.问了下学习成绩与奖学金的问题
 
