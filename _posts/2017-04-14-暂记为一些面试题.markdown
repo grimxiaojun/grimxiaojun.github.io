@@ -34,7 +34,7 @@ title:  "暂记为一些面试题"
 
 
 
-## 综合面
+### 综合面：
 
 1.自我介绍
 
@@ -44,7 +44,7 @@ title:  "暂记为一些面试题"
 
 我回答了以前有4层，现在有5层，从下往上是liunx内核层，系统服务层（这应该是系统运行库和运行环境层），我说第三层忘了，第四层是应用层，
 
-完整的如下图![Android系统架构](../../../images/photo/android.PNG)
+完整的如下图![Android系统架构](../../../images/photo/android.jpg)
 
 或![Android系统架构图](../../../images/photo/android1.PNG)
 
