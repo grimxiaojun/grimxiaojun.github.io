@@ -26,13 +26,19 @@ title:  "暂记为一些面试题"
 
 这个问题我讲了一下GC算法的原理（标记/清除算法），以及由标记/清除算法所演变来的标记/整理算法和复制算法，以画的图表来讲的，比较清晰的可以解释，面试官似乎满意回答的内容
 
+可参考[http://www.cnblogs.com/zuoxiaolong/p/jvm4.html](http://www.cnblogs.com/zuoxiaolong/p/jvm4.html)
+
+与[http://www.cnblogs.com/zuoxiaolong/p/jvm5.html](http://www.cnblogs.com/zuoxiaolong/p/jvm5.html)
+
+
+
 7.C++中的STL的常用方法，
 
-我先回答的sort，并将sort,table_sort以及partition_sort几种排序的原理说了一遍，并举了一个例子来说明sort中的第三个参数的方便
+我先回答的通用算法`algorithm 中的sort`，并将sort,table_sort以及partition_sort几种排序的原理说了一遍，并举了一个例子来说明sort中的第三个参数的方便
 
 接着面试官应该挺满意我的回答，所以就没让我继续介绍，让我过了一面，去等待综合面
 
-
+PS：关于具体STL中的常用容器与方法可自行Google，有很多这样的文章，我自己只总结过vector,list,deque等就不贴出来了献丑了，囧。。
 
 ### 综合面：
 
@@ -56,7 +62,7 @@ title:  "暂记为一些面试题"
 
 
 
-## 等通知，希望拿到实习Offer
+### 等通知，希望拿到实习Offer
 
 
 
@@ -66,6 +72,3 @@ title:  "暂记为一些面试题"
 
 
 
-# 腾讯面试：
-
-晚上回来更。。。。
