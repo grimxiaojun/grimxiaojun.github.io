@@ -52,7 +52,7 @@ PS：关于具体STL中的常用容器与方法可自行Google，有很多这样
 
 完整的正确答案如下图
 
-![Android系统架构](../../../images/photo/android.jpg)
+![Android系统架构](../images/photo/android.jpg)
 
 或者如下图
 
