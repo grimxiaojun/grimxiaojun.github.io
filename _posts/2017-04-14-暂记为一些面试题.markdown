@@ -54,7 +54,7 @@ PS：关于具体STL中的常用容器与方法可自行Google，有很多这样
 
 ![Android系统架构](../images/photo/android.jpg)
 
-或
+或者如下图
 
 ![Android系统架构图](../images/photo/android1.png)
 
