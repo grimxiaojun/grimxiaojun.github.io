@@ -26,7 +26,7 @@ title:  "暂记为一些面试题"
 
 这个问题我讲了一下GC算法的原理（标记/清除算法），以及由标记/清除算法所演变来的标记/整理算法和复制算法，以画的图表来讲的，比较清晰的可以解释，面试官似乎满意回答的内容
 
-可参考[http://www.cnblogs.com/zuoxiaolong/p/jvm4.html](http://www.cnblogs.com/zuoxiaolong/p/jvm4.html)
+具体可参考[http://www.cnblogs.com/zuoxiaolong/p/jvm4.html](http://www.cnblogs.com/zuoxiaolong/p/jvm4.html)
 
 与[http://www.cnblogs.com/zuoxiaolong/p/jvm5.html](http://www.cnblogs.com/zuoxiaolong/p/jvm5.html)
 
@@ -50,7 +50,7 @@ PS：关于具体STL中的常用容器与方法可自行Google，有很多这样
 
 我回答了以前有4层，现在有5层，从下往上是liunx内核层，系统服务层（这应该是系统运行库和运行环境层），我说第三层忘了，第四层是应用层，
 
-完整的如下图![Android系统架构](../../../images/photo/android.jpg)
+完整的如下图![Android系统架构](../images/photo/android.jpg)
 
 或![Android系统架构图](../images/photo/android1.png)
 
