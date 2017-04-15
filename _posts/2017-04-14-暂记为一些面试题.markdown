@@ -62,7 +62,7 @@ PS：关于具体STL中的常用容器与方法可自行Google，有很多这样
 
 或者如下图
 
-![Android系统架构图](../../../images/photo/android1.png)
+![Android系统架构图](../images/photo/android1.png)
 
 4.问了下学习成绩与奖学金的问题
 
