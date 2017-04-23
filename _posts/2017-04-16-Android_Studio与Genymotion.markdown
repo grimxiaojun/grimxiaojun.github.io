@@ -45,7 +45,21 @@ title:  "Android Studio与Genymotion"
 
 
 
+### 4.
 
+利用模拟器访问本地电脑服务器（如Apache）
+
+开始我用10.0.2.2进行访问出现错误
+
+然后我边用了ipv4的ip地址进行访问便成功了
+
+ps：查看ipv4，打开命令行输入`ipconfig或者ipconfig /all`便可查看
+
+
+
+### 5.
+
+当android studio的adb.exe(5037)端口被Genymotion占用时，可以将Genymotion的SDK设置为本地，然后重新启动即可
 
 
 
