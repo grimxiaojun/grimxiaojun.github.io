@@ -107,4 +107,40 @@ int main(){
 }
 ```
 
+## 题目大意：
 
+```
+利用归并排序对数据排序
+```
+
+代码如下：
+
+```c++
+
+void merge(vector<int>&v,vector<int>&temp,int start,int end){
+	if(start>=end)return;
+	int len=end-start;
+	int mid=(len>>1)+start;
+	int start1=start,end1=mid,start2=mid+1,end2=end;
+	merge(v,temp,start1,end1);
+	merge(v,temp,start2,end2);
+	int k=start;
+	while(start1<=end1&&start2<=end2){
+		temp[k++]=v[start1]<v[start2]?v[start1++]:v[start2++];
+	}
+	while(start1<=end1){
+		temp[k++]=v[start1++];
+	}
+	while(start2<=end2){
+		temp[k++]=v[start2++];
+	}
+	for(int i=start;i<=end;++i){
+		v[i]=temp[i];
+	}
+}
+void merge_sort(vector<int>&v,int n){
+	vector<int>temp(n);
+	merge(v,temp,0,n-1);
+}
+
+```
