@@ -144,3 +144,67 @@ void merge_sort(vector<int>&v,int n){
 }
 
 ```
+## 题目大意：
+
+```
+利用选择排序对数据排序
+```
+
+代码如下：
+
+```c++
+void selection_sort(vector<int>&v,int n){
+  int i,j,min;
+  for(int i=0;i<n-1;++i){
+    min=i;
+    for(int j=i+1;j<n;++j){
+      if(v[min]>v[j]){
+        min=j;
+      }
+    }
+    swap(v[i],v[min]);
+  }
+}
+```
+
+## 题目大意：
+
+```
+利用冒泡排序对数据排序
+```
+
+代码如下：
+
+```c++
+void bubble_sort(vector<int>&v,int n){
+  int i,j;
+  for(int i=0;i<n-1;++i){
+    for(int j=0;j<n-1-i;++j){
+      if(v[j]>v[j+1])swap(v[j],v[j+1]);
+    }
+  }
+}
+```
+
+## 题目大意：
+
+```
+利用插入排序对数据排序
+```
+
+代码如下：
+
+```c++
+void insertion_sort(vector<int>&v,int n){
+  int i,j,temp;
+  for(i=1;i<n;++i){
+    temp=v[i];
+    j=i-1;
+    for(;j>=0&&v[j]>temp;--j){
+      v[j+1]=v[j];
+    }
+    v[j+1]=temp;
+  }
+}
+```
+
