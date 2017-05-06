@@ -1,0 +1,215 @@
+---
+layout: post
+title:  "View的绘制流程"
+
+---
+
+
+# Android View的绘制过程
+
+
+
+最近又看了一下view的绘制，所以小小记录总结一波
+
+
+
+首先android的UI管理系统的层级关系如下所示
+
+![UI管理层级]()
+
+首先Activity是作为应用程序的载体存在，代表完整的用户界面
+
+PhoneWindow是Android系统中最基本的窗口系统，每个Activity会创建一个
+
+PhoneWindow是Activity和View系统交互的接口
+
+DecorView本质上是一个FrameLayout，是Activity中所有的祖先
+
+
+
+### 1.绘制的整体流程
+
+首先启动一个主Activity，接着根据Activity的布局来进行绘制，绘制从根视图开始遍历，从上到下遍历整个视图，即从ViewRoot的performTraversals()方法开始。每一个View控件负责自己，ViewGroup还需负责通知自己的子View进行绘制操作。
+
+绘制过程可分为3个步骤：
+
+1.测量（Measure）
+
+2.布局（Layout ）
+
+3.绘制（Draw）
+
+
+
+performTraversals()核心代码
+
+```java
+   private void performTraversals(){
+     ...
+     int childWidthMeasureSpec=getRootMeasureSpec(mWidth,lp.width);
+     int childHeightMeasureSpec=getRootMeasureSpec(mWidth,lp.height);
+     ...
+     //执行测量过程
+     performMeasure(childWidthMeasureSpec,childHeightMeasureSpec);
+     
+     
+     //执行布局流程
+     performLayout(lp,desiredWindowWidth,desiredWindowHeight);
+     
+     //执行绘制流程
+     performDraw();
+   }
+```
+
+
+
+
+#### 2.MeasureSpec
+
+MeasureSpec是一个32为的整数值
+
+高2位表示测量模式SpecMode，低30位表示规格大小SpecSize
+
+
+
+MeasureSpec 是View类的一个静态内部类，用来说明如何测量View
+
+核心代码如下：
+
+```java
+public static class MeasureSpec{
+  private static final int MODE_SHIFT=30;
+  private static final int MODE_MASK=0x3<<MODE_SHIFT;
+  
+  //不指定测量模式
+  public static final int UNSPECIFIED=0<<MODE_SHIFT;
+  
+  //精确测量模式
+  public static final int EXACTLY=1<<MODE_SHIFT;
+  
+  //最大值测量模式
+  public static final AT_MOST=2<<MODE_SHIFT;
+  
+  
+  //根据指定模式和创建一个MeasureSpec
+  
+  public static int makeMeasureSpec(int size,int mode){
+    if(sUseBrokenMakeMeasureSpec){
+      return size+mode;
+    }else{
+      return (size&~MODE_MASK)|(mode&MODE_MASK);
+    }
+    
+  }
+  
+  
+  //微调大小
+  static int adjust(int measureSpec,int delta){
+    final int mode=getMode(measureSpec);
+    if(mode==UNSPECIFIED){
+      return makeMeasureSpec(0,UNSPECIFIED);
+    }
+    int size=getSize(measureSpec)+delta;
+    
+    if(size<0){
+      Log.e(VIEW_LOG_TAG,"MeasureSpec.adjust:new size would be negative!("+size+")spec: "+toString(measureSpec)+"delta: "+delta);
+       size=0;
+    }
+    return makeMeasureSpec(size,mode);
+  }
+  
+  
+}
+```
+上述代码主要关注测量模式
+
+1.UNSPECIFIED：不定量测量模式，父视图没有限制子视图的尺寸，子视图可以是想要的任何尺寸，通常用于系统开发，应用开发中很少使用到
+
+2.EXACTLY：精确测量模式，当视图的layout_width或layout_height指定为具体数值或为match_parent时生效，（此时View测量值就是SpecSize的值）
+
+3.AT_MOST：最大值模式，当视图的layout_width或layout_height指定为wrap_content时生效
+
+
+
+对于DecorView，它的MeasureSpec由窗口尺寸和其自身的LayoutParams共同决定
+
+对于普通的View，它的MeasureSpec由父视图的MeasureSpec其自身的LayoutParams共同决定
+
+
+
+
+
+### Measure
+
+Measure操作用来计算View的大小
+
+具体的测量操作是分发给ViewGroup的，由ViewGroup在它的measureChild方法中传递给子View.
+
+ViewGroup通过遍历自身所有的子View，并逐个调用子View的measure方法实现测量操作
+
+### Layout
+
+Layout过程用来确定View在父容器中的布局位置，它是由父容器获取子View的位置参数后，调用子View的layout方法并将位置传入实现的
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Draw
+
+Draw操作用来将控件绘制出来，绘制的流程从performDraw方法开始
+
+```java
+private void performDraw(){
+  draw(fullRedrawNeeded);
+}
+private void draw(boolean fullRedrawNeeded){
+    if(!drawSoftware(surface,mAttachInfo,xOffset,yOffset,scalingRequired,dirty)){
+     return; 
+    }
+}
+
+
+private boolean drawSoftware(Surface surface,AttachInfo attachInfo,int xoff,int yoff,boolean scalingRequired,Rect dirty){
+  mView.draw(cancvs);
+}
+
+
+
+
+public void draw(Canvas canvas){
+  
+  //绘制背景
+  drawBackground(cancvs);
+  
+  
+  //保存cancvs图层,为fading做准备
+  saveCount=cancvs.getSaveCount();
+  
+  cancvs.saveLayer(left,top,right,top+length,null,flags);
+  
+  
+  //绘制View内容
+  onDraw(cancvs);
+  
+  //绘制子View
+  dispatchDraw(cancvs);
+  
+  //，绘制View的fading边缘并恢复图层
+  cancvs.drawRect(left,top,right,top+length,p);
+  
+  //绘制View的装饰（如滚动条）
+  onDrawScrollBars(cancvs);
+}
+
+```
