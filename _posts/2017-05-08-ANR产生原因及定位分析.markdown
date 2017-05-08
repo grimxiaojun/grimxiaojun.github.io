@@ -1,0 +1,89 @@
+---
+layout: post
+title:  "ANR产生原因及定位分析"
+
+---
+
+# ANR产生原因及定位分析
+
+
+
+ANR----Application Not Responding
+
+
+
+### 1.ANR产生原因
+
+首先只有当应用程序的UI线程响应超时才会引起ANR，超时产生原因一般有两种。
+
+1. 当前的事件没有机会得到处理，例如UI线程正在响应另外一个事件，当前事件由于某种原因被阻塞了
+2. 当前事件正在处理，但是由于耗时太长没能及时完成。
+
+从本质上讲，产生ANR原因有三种，可以对应到4大组件的3个（Activity/View、BroadcastReceiver和Service）
+
+
+
+`KeyDispatchTimeout`
+
+最常见的一种类型，原因是View的按键事件或者触摸事件在特定的时间（5s）内无法得到响应
+
+`BroadcastTimeout`
+
+因为BroadcastReceiver的onReceive()函数运行在主线程中，在特定的时间（10s）内无法完成处理
+
+`ServiceTimeout`
+
+比较少出现，出现的原因是因为Service的各个生命周期函数在特定时间（20s）内无法完成处理
+
+
+
+
+
+### ANR的定位和分析
+
+当发生ANR时，可以通过结合Logcat日志和生成的位于手机内部存储的`/data/anr/traces.txt`文件进行分析和定位
+
+
+
+Logcat日志信息主要包括
+
+1. 导致ANR的类名及所在包名
+2. 发生ANR的进程名称及ID
+3. ANR产生的原因（类型）
+4. 系统中活跃进程的CPU占用率
+
+
+
+
+
+
+
+### ANR的避免和检测
+
+1. 首先注意不能在主线程中做耗时操作
+2. 其次有工具可以用来检测
+
+在主线程中不要作耗时操作，这个的在代码中体现，比如网络请求，当然在Android4.0后会自动报错，
+
+工具有
+
+`StrictMode`
+
+StrictMode用于检测两大类问题
+
+线程策略ThreadPolicy
+
+虚拟机策略VmPolicy
+
+
+
+`BlockCanary`
+
+用来监控应用主线程的卡顿
+
+基本原理是利用主线程的消息队列处理机制，通过对比消息分发开始和结束时间点来判断是否超过设定的时间，若是，则判断为卡顿。
+
+集成很简单，在build.gradle添加在线依赖
+
+
+
