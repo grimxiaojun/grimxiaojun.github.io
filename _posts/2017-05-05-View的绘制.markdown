@@ -15,7 +15,7 @@ title:  "View的绘制流程"
 
 首先android的UI管理系统的层级关系如下所示
 
-![UI管理层级]()
+![UI管理层级](../images/photo/UI.jpg)
 
 首先Activity是作为应用程序的载体存在，代表完整的用户界面
 
