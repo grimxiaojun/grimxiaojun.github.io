@@ -1,0 +1,100 @@
+---
+layout: post
+title:  "Anroid异步处理"
+tag:"Android"
+
+---
+
+# Anroid异步处理
+
+移动开发要求我们正确处理好主线程和子线程之间的关系，耗时操作放到子线程中
+
+
+
+而异步处理技术是提高应用性能，解决主线程和子线程之间通信的关键
+
+
+
+异步处理技术很多种，下图为完整的继承树
+
+![异步](../../../yibu.jpg)
+
+可以看到Thread是异步处理技术的基础
+
+
+
+创建现场有两种方法，一种继承Thread并重写run方法
+
+一种实现Runnable
+
+
+
+
+
+一般来讲Android应用层都基于liunx的pthreads
+
+应用层可以分为三种类型的线程
+
+1. 主线程，即UI线程，若是在其他线程中更新UI，则会报错，抛出`CalledFromWrongThreadException`
+2. Binder线程，这个线程用于不同进程之间线程的通信，每个进程都维护了一个线程池，用来处理其他进程中线程发送的消息，进程包括系统服务，Intents，ContentProviders和Service；典型应用场景是应用提供一个给其他进程通过AIDL接口绑定的Service
+3. 后台进程
+
+
+
+
+
+### HandlerThread
+
+HandlerThread是一个集成了Looper和MessageQueue的线程，当启动他时会自动生成Looper和MessageQueue，然后等待消息进行处理
+
+run方法源码
+
+```java
+@override
+public void run(){
+  mTid=Process.myTid();
+  Looper.prepare();
+  synchronized(this){
+    mLooper=Looper.myLooper();
+    notifyAll();
+  }
+  Process.setThreadPriority(mPriority);
+  onLooperPrepared();
+  Looper.loop();
+  mTid=-1;
+}
+```
+HandlerThread中只有一个消息队列，队列中的消息是顺序执行的，因此是线程安全的，吞吐量会收到一定的影响，队列中的任务可能会被前面未执行完的任务阻塞。
+
+HandlerThread的内部机制确保了在创建Looper和发送消息之间不存在竞争关系，这个是通过HandlerThread.getLooper()实现为一个阻塞操作实现的。
+
+
+
+
+
+
+
+### AsyncQueryHandler
+
+这是用于ContentProvider上面执行异步的CRUD操作的工具类，CRUD操作会被放到一个单独的子线程中执行，当操作结束获取到消息后，将通过消息的方式传递给调用AsyncQueryHandler的线程，也就是主线程
+
+AsyncQueryHandler是一个抽象类，继承自Handler，通过封装ContentResolver、HandlerThread、Handler等实现对ContentProvider的异步操作
+
+
+
+
+
+### IntentService
+
+由于Service的各个生命周期函数是运行在主线程的，本身不带异步处理技术
+
+Android引入了IntentService，IntentService是Service的子类，具有一样的生命周期，不过它提供了在后台线程中处理异步任务的机制
+
+它是在后台线程中顺序执行所有任务，通过给Context.startService传递一个Intent类型的参数可以启动IntentService的异步执行，如果此时IntentService正在运行中，那个这么新的Intent将会进入消息队列中进行排队等待前面任务的执行完成后才能执行，若此时没有IntentService在运行，那将会启动一个新的IntentService。
+
+当后台线程队列中所有任务均被处理完后，IntentService将会结束它的生命周期，因此我们不需手动结束IntentService
+
+
+
+
+
