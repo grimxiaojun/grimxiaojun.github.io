@@ -1,8 +1,7 @@
 ---
 layout: post
 title:  "Anroid异步处理"
-tag:"Android"
-
+tags: Android  
 ---
 
 # Anroid异步处理
@@ -17,7 +16,7 @@ tag:"Android"
 
 异步处理技术很多种，下图为完整的继承树
 
-![异步](../../../yibu.jpg)
+![异步](../../../images/photo/yibu.jpg)
 
 可以看到Thread是异步处理技术的基础
 
@@ -95,6 +94,148 @@ Android引入了IntentService，IntentService是Service的子类，具有一样�
 当后台线程队列中所有任务均被处理完后，IntentService将会结束它的生命周期，因此我们不需手动结束IntentService
 
 
+
+### Executor Framework
+
+它为我们提供了这些功能
+
+1. 创建工作线程池，同时通过队列来控制能够在这些线程执行的任务的个数
+2. 检测导致线程意外终止的错误
+3. 等待线程执行完成并获取执行结果
+4. 批量执行线程，并通过固定的顺序获取执行结果
+5. 在合适的时机启动后台线程，从而保证线程执行结果可以很快反馈给用户
+
+
+
+### AsyncTask
+
+AsyncTask是在Executor框架基础上进行的封装，实现将耗时任务移动到工作线程中执行即`doInBackground方法`，同时提供方便的接口实现工作线程和主线程的通信如`onPostExecute方法与onProgressUpdate方法`
+
+
+
+若是异步处理，则最大核心线程数为系统CPU核数+1，这是由AsyncTask中的ThreadPoolExecutor指定的
+
+
+
+
+
+### Loader
+
+Loader是Android3.0开始引入的一个异步数据加载框架，使得Activity或Fragment异步加载数据变得很简单，并且当数据源发生变化时，他能够及时发出消息通知
+
+
+
+它所涉及的api:
+
+1. Loader：加载器框架的基类，当一个加载器被激活后，他就会开始监视数据源并在数据发生变化时发送新的结果
+
+2. AsyncTaskLoader：Loader的子类，是基于AsyncTask实现的异步数据加载类，是一个抽象类，其子类必须实现`loadInBackground`，在其中进行具体数据加载操作
+
+3. CursorLoader：AsyncTaskLoader的子类，封装了对ContentResolver的query操作，实现从ContentProvider中查询数据的功能
+
+4. LoaderManager：抽象类，Activity和Fragment默认会关联一个LoaderManager的对象，我们只需要通过getLoaderManager即可获取，LoaderManager是用来管理一个或多个加载其对象的
+
+5. LoaderManager.LoaderCallbacks：LoaderManager的回调接口，主要有三个方法
+
+   ① onCreateLoader()：初始化并返回一个新的Loader实例
+
+   ② onLoadFinished()：当一个加载器完成加载过程之后会回调这个方法
+
+   ③ onLoaderReset()：当一个加载器被重置并且数据无效时会回调这个方法
+
+
+
+例子
+
+```java
+package com.example.load;
+
+import android.app.ListActivity;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.widget.SimpleCursorAdapter;
+
+/**
+ * Created by 王小俊 on 2017/5/9.
+ */
+
+public class ContactActivity extends ListActivity
+        implements LoaderManager.LoaderCallbacks<Cursor>{
+
+    private static final int CONTACT_NAME_LOADER_ID=0;
+
+    static final String[] CONTACTS_SUMMARY_PROJECTION =new String[]{
+            ContactsContract.Contacts._ID,ContactsContract.Contacts.DISPLAY_NAME
+    };
+
+    SimpleCursorAdapter mAdapter;
+
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        initAdapter();
+        getLoaderManager().initLoader(CONTACT_NAME_LOADER_ID,null,this);
+    }
+
+    private void initAdapter(){
+        mAdapter = new SimpleCursorAdapter(this,
+                android.R.layout.simple_list_item_1, null,
+                new String[]{ContactsContract.Contacts.DISPLAY_NAME},
+                new int[]{android.R.id.text1}, 0);
+        setListAdapter(mAdapter);
+
+    }
+
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+
+        return new CursorLoader(this, ContactsContract.Contacts.CONTENT_URI,
+                CONTACTS_SUMMARY_PROJECTION, null, null,
+                ContactsContract.Contacts.DISPLAY_NAME + "ASC");
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mAdapter.swapCursor(null);
+    }
+}
+```
+
+
+
+
+
+
+## 小结
+
+在具体使用需考虑以下因素
+
+1. 尽量使用更少的系统资源，例如CPU和内存
+2. 为应用提供更好的性能和相应度
+3. 实现和使用不复杂
+4. 写出的代码是否符合好的设计，是否易于理解和维护
+
+
+
+
+
+
+
+
+
+
+
+### ps:以上内容大部分为android高级进阶内的内容
 
 
 
