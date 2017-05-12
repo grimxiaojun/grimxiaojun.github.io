@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Welcome to Grimxiaojun's Blog!"
-
+tags: build-blog
 ---
 # 欢迎来到王小俊的个人博客
 
