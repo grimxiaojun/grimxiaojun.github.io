@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Pat 甲级 训练真题集 1001-1002!"
-tags:PAT甲级测试题
+tags: PAT-A
 ---
 string和数值之间的转换（均为C++11）
 
