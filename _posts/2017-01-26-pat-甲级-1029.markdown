@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Pat 甲级 训练真题集 1029!"
-
+tags: PAT-A
 ---
 # 1029. Median (25)
 

@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Pat 甲级 训练真题集 1017!"
-tags:PAT甲级测试题
+tags: PAT-A
 ---
 # 1017. Queueing at Bank (25)
 

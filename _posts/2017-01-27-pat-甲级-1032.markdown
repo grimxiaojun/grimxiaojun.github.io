@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Pat 甲级 训练真题集 1032!"
-
+tags: PAT-A
 ---
 # 1032. Sharing (25)
 

@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Pat 甲级 训练真题集 1028!"
-
+tags: PAT-A
 ---
 # 1028. List Sorting (25)
 

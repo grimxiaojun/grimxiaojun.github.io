@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Pat 甲级 训练真题集 1040!"
-
+tags: PAT-A
 ---
 # 1040. Longest Symmetric String (25)
 

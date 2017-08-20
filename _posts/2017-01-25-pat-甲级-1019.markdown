@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Pat 甲级 训练真题集 1019!"
-tags:PAT甲级测试题
+tags: PAT-A
 ---
 # 1019. General Palindromic Number (20)
 

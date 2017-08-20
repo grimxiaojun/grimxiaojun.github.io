@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Pat 甲级 训练真题集 1042!"
-
+tags: PAT-A
 ---
 # 1042. Shuffling Machine (20)
 

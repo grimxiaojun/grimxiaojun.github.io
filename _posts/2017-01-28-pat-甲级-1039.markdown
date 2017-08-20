@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Pat 甲级 训练真题集 1039!"
-
+tags: PAT-A
 ---
 # 1039. Course List for Student (25)
 

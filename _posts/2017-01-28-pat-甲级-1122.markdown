@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Pat 甲级 训练真题集 1122!"
-
+tags: PAT-A
 ---
 # 1122. Hamiltonian Cycle (25)
 

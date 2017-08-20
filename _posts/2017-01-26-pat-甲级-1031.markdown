@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Pat 甲级 训练真题集 1031!"
-
+tags: PAT-A
 ---
 # 1031. Hello World for U (20)
 

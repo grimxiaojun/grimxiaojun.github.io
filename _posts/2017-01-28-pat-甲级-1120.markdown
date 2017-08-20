@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Pat 甲级 训练真题集 1120!"
-
+tags: PAT-A
 ---
 # 1120. Friend Numbers (20)
 

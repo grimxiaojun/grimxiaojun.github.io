@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Pat 甲级 训练真题集 1041!"
-
+tags: PAT-A
 ---
 # 1041. Be Unique (20)
 

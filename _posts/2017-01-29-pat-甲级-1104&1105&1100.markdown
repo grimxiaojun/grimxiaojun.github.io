@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Pat 甲级 训练真题集 1104&1105!"
-
+tags: PAT-A
 ---
 # 1104. Sum of Number Segments (20)
 

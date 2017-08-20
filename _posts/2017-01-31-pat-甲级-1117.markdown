@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Pat 甲级 训练真题集 1117!"
-
+tags: PAT-A
 ---
 # 1117. Eddington Number(25)
 

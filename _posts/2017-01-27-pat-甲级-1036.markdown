@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Pat 甲级 训练真题集 1036!"
-
+tags: PAT-A
 ---
 # 1036. Boys vs Girls (25)
 

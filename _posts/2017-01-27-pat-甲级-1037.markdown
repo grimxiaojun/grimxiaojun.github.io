@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Pat 甲级 训练真题集 1037!"
-
+tags: PAT-A
 ---
 # 1037. Magic Coupon (25)
 

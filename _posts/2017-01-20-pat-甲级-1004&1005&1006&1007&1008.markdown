@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Pat 甲级 训练真题集 1004&1005&1006&1007&1008!"
-tags:PAT甲级测试题
+tags: PAT-A
 ---
 # 1004. Counting Leaves (30)
 
