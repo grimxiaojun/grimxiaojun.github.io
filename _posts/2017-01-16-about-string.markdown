@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "C++的标准库"
-tags:C++标准库
+tags:C++_library
 ---
 # 今天是关于学习C++的标准库的相关内容
 
